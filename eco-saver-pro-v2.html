@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
+  <title>Eco‑Saver Pro</title>
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#1a3a2a"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="EcoSaver"/>
+  <link rel="manifest" href="/manifest.json"/>
+
+  <!-- Fonts: Fraunces (display) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+/* ═══════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --forest:    #0d2218;
+  --canopy:    #1a3a2a;
+  --moss:      #2d5a3d;
+  --fern:      #3d7a52;
+  --leaf:      #52a86e;
+  --lime:      #8fd48c;
+  --mist:      #c8e8c0;
+  --cream:     #f4f0e6;
+  --soil:      #8b6f47;
+  --amber:     #e8a030;
+  --coral:     #e05a4e;
+  --sky:       #6bb8d4;
+
+  --text-h:    #f4f0e6;
+  --text-b:    #c8dbc0;
+  --text-dim:  #7aaa85;
+  --text-dark: #1a3a2a;
+
+  --r-sm: 14px;
+  --r-md: 20px;
+  --r-lg: 28px;
+  --r-xl: 38px;
+
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --nav-h: 72px;
+  --header-h: 64px;
+}
+
+/* ═══════════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{height:100%;overflow:hidden}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--forest);
+  color:var(--text-b);
+  height:100%; overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ═══════════════════════════════════════════════
+   ORGANIC BACKGROUND
+═══════════════════════════════════════════════ */
+#bg-canvas{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  overflow:hidden;
+}
+.blob{
+  position:absolute;border-radius:60% 40% 55% 45% / 50% 60% 40% 50%;
+  filter:blur(60px);opacity:.18;
+  animation:blobFloat 20s ease-in-out infinite alternate;
+}
+.blob-1{width:340px;height:280px;background:var(--fern);top:-60px;left:-80px;animation-delay:0s}
+.blob-2{width:260px;height:320px;background:var(--leaf);top:30%;right:-100px;animation-delay:-7s}
+.blob-3{width:300px;height:260px;background:var(--moss);bottom:10%;left:-60px;animation-delay:-14s}
+.blob-4{width:200px;height:200px;background:var(--lime);top:55%;right:10%;animation-delay:-4s;opacity:.1}
+@keyframes blobFloat{
+  0%{transform:translate(0,0) scale(1) rotate(0deg)}
+  100%{transform:translate(20px,30px) scale(1.08) rotate(8deg)}
+}
+
+/* leaf pattern overlay */
+#bg-canvas::after{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(ellipse 1px 2px at 20% 30%, rgba(140,210,130,.15) 0%, transparent 100%),
+    radial-gradient(ellipse 1px 2px at 70% 20%, rgba(140,210,130,.10) 0%, transparent 100%),
+    radial-gradient(ellipse 1px 2px at 50% 70%, rgba(140,210,130,.12) 0%, transparent 100%);
+  background-size:80px 80px, 120px 120px, 100px 100px;
+}
+
+/* ═══════════════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════════════ */
+#shell{
+  position:fixed;inset:0;z-index:1;
+  display:flex;flex-direction:column;
+  padding-top:var(--safe-top);
+  padding-bottom:var(--safe-bottom);
+}
+
+/* ═══════════════════════════════════════════════
+   TOP STATUS BAR
+═══════════════════════════════════════════════ */
+#status-bar{
+  flex-shrink:0;height:var(--header-h);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  background:rgba(13,34,24,.7);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(82,168,110,.15);
+}
+.status-left{display:flex;flex-direction:column}
+.app-name{
+  font-family:'Fraunces',serif;font-weight:800;font-size:1.15rem;
+  color:var(--text-h);letter-spacing:-.3px;line-height:1;
+}
+.app-name em{font-style:italic;color:var(--lime)}
+#clock{font-size:.72rem;color:var(--text-dim);margin-top:2px;font-variant-numeric:tabular-nums}
+.status-right{display:flex;align-items:center;gap:8px}
+#peak-pill{
+  display:none;background:rgba(232,160,48,.18);
+  border:1px solid rgba(232,160,48,.4);color:var(--amber);
+  border-radius:20px;padding:3px 10px;font-size:.7rem;font-weight:700;
+  animation:pulse 1.8s infinite;
+}
+#grade-pill{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:800;font-size:1rem;
+  background:rgba(82,168,110,.2);border:2px solid var(--leaf);
+  color:var(--lime);transition:all .4s ease;
+}
+#grade-pill.grade-C{background:rgba(232,160,48,.2);border-color:var(--amber);color:var(--amber)}
+#grade-pill.grade-F{background:rgba(224,90,78,.2);border-color:var(--coral);color:var(--coral)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ═══════════════════════════════════════════════
+   SCROLL AREA
+═══════════════════════════════════════════════ */
+#scroll-area{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:none;
+}
+#scroll-area::-webkit-scrollbar{display:none}
+
+/* ═══════════════════════════════════════════════
+   VIEWS (tabs)
+═══════════════════════════════════════════════ */
+.view{display:none;padding:16px 16px 24px;animation:viewIn .3s ease both}
+.view.active{display:block}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ═══════════════════════════════════════════════
+   ALERTS STRIP
+═══════════════════════════════════════════════ */
+#alerts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.alert{
+  border-radius:var(--r-sm);padding:10px 14px;
+  font-size:.82rem;font-weight:500;display:flex;align-items:flex-start;gap:8px;
+  line-height:1.4;
+}
+.alert-warn{background:rgba(232,160,48,.12);border:1px solid rgba(232,160,48,.3);color:var(--amber)}
+.alert-danger{background:rgba(224,90,78,.12);border:1px solid rgba(224,90,78,.35);color:var(--coral)}
+.alert-info{background:rgba(82,168,110,.1);border:1px solid rgba(82,168,110,.25);color:var(--lime)}
+
+/* ═══════════════════════════════════════════════
+   HERO CARD (Dashboard)
+═══════════════════════════════════════════════ */
+.hero-card{
+  background:linear-gradient(145deg,var(--canopy),var(--moss));
+  border:1px solid rgba(82,168,110,.25);
+  border-radius:var(--r-xl);
+  padding:24px 22px 20px;
+  margin-bottom:14px;
+  position:relative;overflow:hidden;
+}
+.hero-card::before{
+  content:'🌿';position:absolute;
+  right:-14px;top:-20px;font-size:120px;opacity:.06;
+  transform:rotate(20deg);pointer-events:none;
+  filter:saturate(0);
+}
+.hero-label{
+  font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:6px;
+}
+.hero-bill{
+  font-family:'Fraunces',serif;font-size:3.2rem;font-weight:800;
+  color:var(--text-h);line-height:1;letter-spacing:-2px;
+}
+.hero-bill span{font-size:1.6rem;color:var(--lime);vertical-align:super;font-size:1.4rem}
+.hero-sub{font-size:.82rem;color:var(--text-dim);margin-top:4px;margin-bottom:18px}
+
+/* budget bar */
+.bbar-track{height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.bbar-fill{
+  height:100%;border-radius:4px;
+  background:linear-gradient(90deg,var(--leaf),var(--lime));
+  transition:width .7s cubic-bezier(.4,0,.2,1),background .4s;
+}
+.bbar-fill.warn{background:linear-gradient(90deg,var(--amber),#ffc06a)}
+.bbar-fill.over{background:linear-gradient(90deg,var(--coral),#ff8f84)}
+.bbar-nums{display:flex;justify-content:space-between;font-size:.76rem;color:var(--text-dim)}
+.bbar-nums .hi{color:var(--text-h);font-weight:600}
+
+/* quick stats row */
+.qstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+.qstat{
+  background:rgba(255,255,255,.06);border-radius:var(--r-md);
+  padding:12px 10px;text-align:center;
+}
+.qstat-val{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;color:var(--text-h);line-height:1}
+.qstat-lbl{font-size:.62rem;color:var(--text-dim);margin-top:3px;text-transform:uppercase;letter-spacing:.8px}
+
+/* ═══════════════════════════════════════════════
+   SECTION TITLE
+═══════════════════════════════════════════════ */
+.sec-title{
+  font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;
+  color:var(--text-h);margin:18px 0 10px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sec-title .sub{font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--text-dim);font-weight:400}
+
+/* ═══════════════════════════════════════════════
+   VAMPIRE CARD
+═══════════════════════════════════════════════ */
+.vampire-card{
+  background:rgba(224,90,78,.08);
+  border:1px solid rgba(224,90,78,.2);
+  border-radius:var(--r-lg);padding:16px 18px;
+  display:flex;align-items:center;gap:14px;margin-bottom:14px;
+}
+.vampire-icon{font-size:2rem;flex-shrink:0;filter:drop-shadow(0 0 8px rgba(224,90,78,.4))}
+.vampire-info .label{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--coral);font-weight:700;margin-bottom:2px}
+.vampire-info .name{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--text-h);line-height:1.2}
+.vampire-info .detail{font-size:.78rem;color:var(--text-dim);margin-top:2px}
+
+/* ═══════════════════════════════════════════════
+   LEAF CARDS (appliance list)
+═══════════════════════════════════════════════ */
+.leaf-card{
+  background:var(--canopy);
+  border:1px solid rgba(82,168,110,.15);
+  border-radius:var(--r-lg);
+  padding:14px 16px;
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:12px;
+  transition:border-color .2s,background .2s;
+  position:relative;overflow:hidden;
+}
+.leaf-card::after{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--leaf),var(--lime));
+  border-radius:2px 0 0 2px;
+}
+.leaf-card.editing{
+  border-color:rgba(143,212,140,.5);
+  background:rgba(82,168,110,.08);
+}
+.lc-icon{
+  width:44px;height:44px;border-radius:var(--r-sm);flex-shrink:0;
+  background:rgba(82,168,110,.12);border:1px solid rgba(82,168,110,.2);
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+}
+.lc-body{flex:1;min-width:0}
+.lc-name{font-weight:600;font-size:.9rem;color:var(--text-h);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lc-meta{font-size:.74rem;color:var(--text-dim);margin-top:1px}
+.lc-right{text-align:right;flex-shrink:0}
+.lc-kwh{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:var(--lime);line-height:1}
+.lc-cost{font-size:.74rem;color:var(--text-dim);margin-top:1px}
+.lc-actions{display:flex;gap:6px;margin-top:8px}
+.lc-btn{
+  flex:1;padding:6px;border-radius:8px;border:1px solid;
+  font-family:'DM Sans',sans-serif;font-size:.74rem;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.lc-btn-edit{background:rgba(82,168,110,.1);border-color:rgba(82,168,110,.3);color:var(--leaf)}
+.lc-btn-edit:hover{background:rgba(82,168,110,.2)}
+.lc-btn-del{background:rgba(224,90,78,.1);border-color:rgba(224,90,78,.3);color:var(--coral)}
+.lc-btn-del:hover{background:rgba(224,90,78,.2)}
+
+.empty-state{
+  text-align:center;padding:40px 20px;
+  background:var(--canopy);border:1px dashed rgba(82,168,110,.2);
+  border-radius:var(--r-xl);
+}
+.empty-state .emoji{font-size:3rem;margin-bottom:10px;display:block}
+.empty-state p{font-size:.9rem;color:var(--text-dim);line-height:1.5}
+
+/* ═══════════════════════════════════════════════
+   TIPS CARDS
+═══════════════════════════════════════════════ */
+.tip-card{
+  background:var(--canopy);
+  border:1px solid rgba(82,168,110,.15);
+  border-radius:var(--r-lg);
+  padding:16px;
+  margin-bottom:10px;
+  display:flex;gap:14px;align-items:flex-start;
+  animation:viewIn .35s ease both;
+}
+.tip-card:nth-child(1){animation-delay:.04s}
+.tip-card:nth-child(2){animation-delay:.08s}
+.tip-card:nth-child(3){animation-delay:.12s}
+.tip-card:nth-child(4){animation-delay:.16s}
+.tip-card:nth-child(5){animation-delay:.20s}
+.tip-card:nth-child(6){animation-delay:.24s}
+.tip-ico{
+  font-size:1.7rem;flex-shrink:0;
+  filter:drop-shadow(0 2px 6px rgba(143,212,140,.25));
+}
+.tip-body .tip-title{font-weight:700;font-size:.9rem;color:var(--text-h);margin-bottom:4px}
+.tip-body .tip-text{font-size:.8rem;color:var(--text-dim);line-height:1.55}
+.tip-save{
+  display:inline-block;margin-top:8px;
+  background:rgba(143,212,140,.12);border:1px solid rgba(143,212,140,.25);
+  color:var(--lime);font-size:.72rem;font-weight:700;
+  border-radius:20px;padding:2px 10px;
+}
+
+.tips-loading{
+  display:flex;flex-direction:column;align-items:center;
+  padding:40px 20px;gap:14px;color:var(--text-dim);font-size:.9rem;
+}
+.dots{display:flex;gap:6px}
+.dots span{
+  width:8px;height:8px;border-radius:50%;background:var(--leaf);
+  animation:bounce .9s infinite;
+}
+.dots span:nth-child(2){animation-delay:.15s}
+.dots span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
+
+/* ═══════════════════════════════════════════════
+   SETTINGS VIEW
+═══════════════════════════════════════════════ */
+.settings-section{
+  background:var(--canopy);border:1px solid rgba(82,168,110,.15);
+  border-radius:var(--r-xl);overflow:hidden;margin-bottom:14px;
+}
+.settings-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid rgba(82,168,110,.08);
+}
+.settings-row:last-child{border-bottom:none}
+.sr-label{font-size:.88rem;color:var(--text-h);font-weight:500}
+.sr-sub{font-size:.74rem;color:var(--text-dim);margin-top:1px}
+.sr-right{display:flex;align-items:center;gap:8px}
+.settings-input{
+  background:rgba(255,255,255,.07);border:1px solid rgba(82,168,110,.25);
+  color:var(--text-h);border-radius:10px;padding:7px 12px;
+  font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;
+  width:100px;text-align:right;transition:border-color .2s,box-shadow .2s;
+}
+.settings-input:focus{outline:none;border-color:var(--leaf);box-shadow:0 0 0 3px rgba(82,168,110,.15)}
+.settings-input.wide{width:130px}
+
+.pill-btn{
+  padding:7px 16px;border-radius:20px;border:1px solid;
+  font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;
+  cursor:pointer;transition:all .2s;
+}
+.pill-btn-green{background:rgba(82,168,110,.12);border-color:rgba(82,168,110,.35);color:var(--leaf)}
+.pill-btn-green:hover{background:rgba(82,168,110,.22)}
+.pill-btn-red{background:rgba(224,90,78,.1);border-color:rgba(224,90,78,.3);color:var(--coral)}
+.pill-btn-red:hover{background:rgba(224,90,78,.2)}
+.pill-btn-amber{background:rgba(232,160,48,.1);border-color:rgba(232,160,48,.3);color:var(--amber)}
+.pill-btn-amber:hover{background:rgba(232,160,48,.2)}
+#file-input{display:none}
+
+/* ═══════════════════════════════════════════════
+   ADD/EDIT FORM (floating sheet)
+═══════════════════════════════════════════════ */
+#form-sheet{
+  position:fixed;inset:0;z-index:200;
+  display:none;flex-direction:column;justify-content:flex-end;
+}
+#form-sheet.open{display:flex}
+.sheet-backdrop{
+  position:absolute;inset:0;background:rgba(5,15,10,.7);
+  backdrop-filter:blur(6px);
+  animation:fadeIn .25s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.sheet-panel{
+  position:relative;z-index:1;
+  background:var(--canopy);
+  border-radius:var(--r-xl) var(--r-xl) 0 0;
+  padding:0 0 calc(20px + var(--safe-bottom));
+  max-height:92vh;overflow-y:auto;
+  animation:slideUp .32s cubic-bezier(.2,.8,.4,1);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.15);margin:12px auto 0}
+.sheet-header{
+  padding:16px 20px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(82,168,110,.12);
+}
+.sheet-title{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700;color:var(--text-h)}
+.sheet-close{
+  width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;
+  background:rgba(255,255,255,.08);color:var(--text-dim);font-size:1rem;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.sheet-close:hover{background:rgba(255,255,255,.14);color:var(--text-h)}
+.sheet-body{padding:18px 20px}
+
+.form-field{margin-bottom:14px}
+.field-label{font-size:.75rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;display:block}
+.field-input,.field-select{
+  width:100%;background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(82,168,110,.2);
+  color:var(--text-h);border-radius:var(--r-sm);
+  padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:.95rem;
+  transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;
+}
+.field-input:focus,.field-select:focus{
+  outline:none;border-color:var(--leaf);box-shadow:0 0 0 3px rgba(82,168,110,.14);
+}
+.field-select option{background:#1a3a2a}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-hint{font-size:.72rem;color:var(--text-dim);margin-top:4px}
+
+.form-actions{display:flex;gap:10px;margin-top:18px}
+.btn-submit{
+  flex:1;padding:14px;border-radius:var(--r-md);border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--fern),var(--leaf));
+  color:var(--text-h);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;
+  transition:all .2s;box-shadow:0 4px 16px rgba(61,122,82,.3);
+}
+.btn-submit:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-cancel-form{
+  padding:14px 18px;border-radius:var(--r-md);border:1px solid rgba(82,168,110,.25);
+  background:transparent;color:var(--text-dim);font-family:'DM Sans',sans-serif;
+  font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;
+}
+.btn-cancel-form:hover{border-color:var(--leaf);color:var(--text-h)}
+
+/* ═══════════════════════════════════════════════
+   FAB (Add button)
+═══════════════════════════════════════════════ */
+#fab{
+  position:fixed;
+  bottom:calc(var(--nav-h) + 16px + var(--safe-bottom));
+  right:20px;z-index:50;
+  width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--fern),var(--leaf));
+  color:var(--text-h);font-size:1.6rem;font-weight:300;
+  box-shadow:0 6px 24px rgba(61,122,82,.45),0 2px 8px rgba(0,0,0,.3);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+}
+#fab:hover{transform:scale(1.08);box-shadow:0 8px 32px rgba(61,122,82,.55)}
+#fab.active{transform:rotate(45deg);background:linear-gradient(135deg,var(--coral),#ff8f84)}
+
+/* ═══════════════════════════════════════════════
+   BOTTOM NAV
+═══════════════════════════════════════════════ */
+#bottom-nav{
+  flex-shrink:0;height:calc(var(--nav-h) + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+  background:rgba(13,34,24,.85);
+  backdrop-filter:blur(24px);
+  border-top:1px solid rgba(82,168,110,.12);
+  display:flex;align-items:flex-start;padding-top:4px;
+  position:relative;z-index:10;
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px 4px;gap:4px;border:none;background:transparent;cursor:pointer;
+  color:var(--text-dim);transition:color .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-btn.active{color:var(--lime)}
+.nav-icon{
+  width:26px;height:26px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+  transition:background .2s,transform .2s;
+}
+.nav-btn.active .nav-icon{
+  background:rgba(143,212,140,.15);
+  transform:translateY(-2px);
+}
+.nav-label{font-size:.62rem;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+
+/* active indicator dot */
+.nav-btn.active::after{
+  content:'';width:4px;height:4px;border-radius:50%;
+  background:var(--lime);position:absolute;bottom:calc(var(--safe-bottom) + 6px);
+}
+
+/* ═══════════════════════════════════════════════
+   GRADE BADGE (view)
+═══════════════════════════════════════════════ */
+.grade-big{
+  display:flex;flex-direction:column;align-items:center;
+  background:var(--canopy);border:1px solid rgba(82,168,110,.2);
+  border-radius:var(--r-xl);padding:28px 20px;margin-bottom:14px;
+  position:relative;overflow:hidden;
+}
+.grade-big::before{
+  content:'';position:absolute;
+  width:200px;height:200px;border-radius:50%;
+  top:-60px;right:-60px;
+  background:radial-gradient(circle,rgba(82,168,110,.1),transparent 70%);
+}
+.grade-ring{
+  width:110px;height:110px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-size:3.2rem;font-weight:800;
+  border:3px solid var(--leaf);background:rgba(82,168,110,.1);
+  color:var(--lime);margin-bottom:14px;
+  box-shadow:0 0 30px rgba(82,168,110,.2),inset 0 0 20px rgba(82,168,110,.05);
+  transition:all .5s ease;
+}
+.grade-ring.C{border-color:var(--amber);background:rgba(232,160,48,.1);color:var(--amber);box-shadow:0 0 30px rgba(232,160,48,.2)}
+.grade-ring.F{border-color:var(--coral);background:rgba(224,90,78,.1);color:var(--coral);box-shadow:0 0 30px rgba(224,90,78,.2)}
+.grade-ring.q{border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.04);color:var(--text-dim)}
+.grade-title{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700;color:var(--text-h);margin-bottom:4px}
+.grade-detail{font-size:.84rem;color:var(--text-dim);text-align:center}
+
+/* scrollbar on sheet */
+.sheet-panel::-webkit-scrollbar{width:0}
+
+/* ═══════════════════════════════════════════════
+   MISC
+═══════════════════════════════════════════════ */
+.divider{height:1px;background:rgba(82,168,110,.08);margin:6px 0 16px}
+.refresh-btn{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(82,168,110,.1);border:1px solid rgba(82,168,110,.25);
+  color:var(--leaf);border-radius:20px;padding:6px 14px;
+  font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;
+  cursor:pointer;transition:all .2s;margin-left:auto;display:flex;
+}
+.refresh-btn:hover{background:rgba(82,168,110,.2)}
+.refresh-btn:disabled{opacity:.5;cursor:not-allowed}
+.spin{display:inline-block;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.sec-actions{display:flex;align-items:center;justify-content:space-between;margin:18px 0 10px}
+
+  </style>
+</head>
+<body>
+
+<!-- ORGANIC BG -->
+<div id="bg-canvas">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<!-- APP SHELL -->
+<div id="shell">
+
+  <!-- STATUS BAR -->
+  <header id="status-bar">
+    <div class="status-left">
+      <div class="app-name">Eco<em>Saver</em> Pro</div>
+      <div id="clock">Loading…</div>
+    </div>
+    <div class="status-right">
+      <div id="peak-pill">⚡ Peak</div>
+      <div id="grade-pill" class="grade-A" aria-label="Efficiency grade">A</div>
+    </div>
+  </header>
+
+  <!-- SCROLL AREA -->
+  <div id="scroll-area">
+
+    <!-- ── DASHBOARD VIEW ── -->
+    <div class="view active" id="view-home">
+      <div id="alerts"></div>
+
+      <!-- Hero bill card -->
+      <div class="hero-card">
+        <div class="hero-label">Estimated Monthly Bill</div>
+        <div class="hero-bill"><span>₱</span><span id="h-bill">0.00</span></div>
+        <div class="hero-sub" id="h-sub">Set your budget and add appliances to begin</div>
+
+        <div class="bbar-track">
+          <div class="bbar-fill" id="bbar" style="width:0%"></div>
+        </div>
+        <div class="bbar-nums">
+          <span>Used: <span class="hi" id="b-used">₱0.00</span></span>
+          <span id="b-pct">—</span>
+          <span id="b-remain">Budget: ₱1,000</span>
+        </div>
+
+        <div class="qstats">
+          <div class="qstat">
+            <div class="qstat-val" id="q-kwh">0</div>
+            <div class="qstat-lbl">kWh/mo</div>
+          </div>
+          <div class="qstat">
+            <div class="qstat-val" id="q-day">0</div>
+            <div class="qstat-lbl">kWh/day</div>
+          </div>
+          <div class="qstat">
+            <div class="qstat-val" id="q-count">0</div>
+            <div class="qstat-lbl">Appliances</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vampire -->
+      <div class="vampire-card" id="vamp-card">
+        <div class="vampire-icon">⚡</div>
+        <div class="vampire-info">
+          <div class="label">Energy Vampire</div>
+          <div class="name" id="vamp-name">No appliances yet</div>
+          <div class="detail" id="vamp-detail">Add appliances to find your biggest consumer</div>
+        </div>
+      </div>
+
+      <!-- Appliance list preview -->
+      <div class="sec-title">
+        My Appliances
+        <span class="sub" id="home-count">0 items</span>
+      </div>
+      <div id="home-list">
+        <div class="empty-state">
+          <span class="emoji">🌱</span>
+          <p>No appliances added yet.<br>Tap <strong>+</strong> to add your first one!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── APPLIANCES VIEW ── -->
+    <div class="view" id="view-appliances">
+      <div class="sec-title">
+        Energy Inventory
+        <span class="sub" id="inv-count">0 appliances</span>
+      </div>
+      <div id="inv-list">
+        <div class="empty-state">
+          <span class="emoji">🌱</span>
+          <p>No appliances yet.<br>Tap <strong>+</strong> to start tracking!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TIPS VIEW ── -->
+    <div class="view" id="view-tips">
+      <div class="sec-actions">
+        <div class="sec-title" style="margin:0">💡 Smart Saving Tips</div>
+        <button class="refresh-btn" id="btn-refresh" onclick="fetchTips(true)">
+          <span id="ref-icon">🔄</span> Refresh
+        </button>
+      </div>
+      <div id="tips-container">
+        <div class="tips-loading">
+          <span>Generating your tips…</span>
+          <div class="dots"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GRADE VIEW ── -->
+    <div class="view" id="view-grade">
+      <div class="sec-title">Efficiency Report</div>
+      <div class="grade-big">
+        <div class="grade-ring q" id="big-grade">?</div>
+        <div class="grade-title" id="big-grade-title">No Budget Set</div>
+        <div class="grade-detail" id="big-grade-detail">Set a budget in Settings to see your grade.</div>
+      </div>
+      <!-- detailed breakdown -->
+      <div class="sec-title">Breakdown</div>
+      <div id="grade-breakdown"></div>
+    </div>
+
+    <!-- ── SETTINGS VIEW ── -->
+    <div class="view" id="view-settings">
+      <div class="sec-title">Settings</div>
+
+      <div class="settings-section">
+        <div class="settings-row">
+          <div>
+            <div class="sr-label">Electricity Rate</div>
+            <div class="sr-sub">₱ per kWh</div>
+          </div>
+          <div class="sr-right">
+            <input type="number" class="settings-input" id="s-rate" min="0.01" step="0.01" value="12.00" aria-label="Rate"/>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="sr-label">Monthly Budget</div>
+            <div class="sr-sub">Target electricity spend</div>
+          </div>
+          <div class="sr-right">
+            <input type="number" class="settings-input wide" id="s-budget" min="0" step="50" value="1000" aria-label="Budget"/>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="sr-label">Reset Defaults</div>
+            <div class="sr-sub">₱12.00/kWh · ₱1,000 budget</div>
+          </div>
+          <div class="sr-right">
+            <button class="pill-btn pill-btn-amber" onclick="resetDefaults()">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-title">Data</div>
+      <div class="settings-section">
+        <div class="settings-row">
+          <div>
+            <div class="sr-label">Export Data</div>
+            <div class="sr-sub">Save as JSON file</div>
+          </div>
+          <button class="pill-btn pill-btn-green" onclick="exportData()">📤 Export</button>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="sr-label">Import Data</div>
+            <div class="sr-sub">Load from JSON file</div>
+          </div>
+          <button class="pill-btn pill-btn-green" onclick="document.getElementById('file-input').click()">📥 Import</button>
+          <input type="file" id="file-input" accept=".json" onchange="importData(event)"/>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="sr-label">Clear All Appliances</div>
+            <div class="sr-sub">Remove everything</div>
+          </div>
+          <button class="pill-btn pill-btn-red" onclick="clearAll()">🗑 Clear</button>
+        </div>
+      </div>
+
+      <div class="sec-title">About</div>
+      <div class="settings-section">
+        <div class="settings-row">
+          <div>
+            <div class="sr-label">Eco‑Saver Pro</div>
+            <div class="sr-sub">Version 2.0 · PWA · localStorage</div>
+          </div>
+          <span style="font-size:1.4rem">🌿</span>
+        </div>
+      </div>
+
+      <div style="height:20px"></div>
+    </div>
+
+  </div><!-- /scroll-area -->
+
+  <!-- BOTTOM NAV -->
+  <nav id="bottom-nav">
+    <button class="nav-btn active" onclick="switchView('home',this)" aria-label="Dashboard">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Home</div>
+    </button>
+    <button class="nav-btn" onclick="switchView('appliances',this)" aria-label="Appliances">
+      <div class="nav-icon">🔌</div>
+      <div class="nav-label">Devices</div>
+    </button>
+    <button class="nav-btn" onclick="switchView('tips',this)" aria-label="Tips">
+      <div class="nav-icon">💡</div>
+      <div class="nav-label">Tips</div>
+    </button>
+    <button class="nav-btn" onclick="switchView('grade',this)" aria-label="Grade">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">Grade</div>
+    </button>
+    <button class="nav-btn" onclick="switchView('settings',this)" aria-label="Settings">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">Settings</div>
+    </button>
+  </nav>
+
+</div><!-- /shell -->
+
+<!-- FAB -->
+<button id="fab" onclick="openSheet()" aria-label="Add appliance">+</button>
+
+<!-- ADD/EDIT SHEET -->
+<div id="form-sheet" role="dialog" aria-modal="true" aria-label="Add or edit appliance">
+  <div class="sheet-backdrop" onclick="closeSheet()"></div>
+  <div class="sheet-panel">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title" id="sheet-title">Add Appliance</div>
+      <button class="sheet-close" onclick="closeSheet()" aria-label="Close">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="form-field">
+        <label class="field-label" for="f-name">Appliance Name</label>
+        <input class="field-input" type="text" id="f-name" placeholder="e.g. Air Conditioner" maxlength="80"/>
+      </div>
+      <div class="field-row">
+        <div class="form-field">
+          <label class="field-label" for="f-watts">Power (Watts)</label>
+          <input class="field-input" type="number" id="f-watts" min="0.1" step="1" placeholder="e.g. 1500"/>
+        </div>
+        <div class="form-field">
+          <label class="field-label" for="f-qty">Quantity</label>
+          <input class="field-input" type="number" id="f-qty" min="1" step="1" value="1"/>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="form-field">
+          <label class="field-label" for="f-hours">Hrs/Day</label>
+          <input class="field-input" type="number" id="f-hours" min="0" max="24" step="0.5" placeholder="e.g. 8"/>
+          <div class="field-hint">0–24 hours daily</div>
+        </div>
+        <div class="form-field">
+          <label class="field-label" for="f-freq">Frequency</label>
+          <select class="field-select" id="f-freq">
+            <option value="daily">Daily (7×/wk)</option>
+            <option value="3x">3× per Week</option>
+            <option value="weekends">Weekends Only</option>
+            <option value="1x">Once a Week</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-cancel-form" onclick="closeSheet()">Cancel</button>
+        <button class="btn-submit" id="btn-submit" onclick="submitForm()">
+          Add Appliance
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   CONSTANTS & STATE
+══════════════════════════════════════════ */
+const FREQ = { daily:1, '3x':3/7, weekends:2/7, '1x':1/7 };
+const FREQ_LBL = { daily:'Daily', '3x':'3×/wk', weekends:'Weekends', '1x':'1×/wk' };
+const ICONS = ['💡','❄️','📺','🖥️','🫧','🔌','🌊','🔥','⚡','🍽️'];
+const LS = { APP:'esp_appliances', RATE:'esp_rate', BUDGET:'esp_budget' };
+
+let appliances = [];
+let rate = 12, budget = 1000, editingId = null;
+let tipsHash = '', tipsFetching = false;
+
+/* ══════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════ */
+(function init() {
+  try { appliances = JSON.parse(localStorage.getItem(LS.APP)) || []; } catch { appliances = []; }
+  rate   = parseFloat(localStorage.getItem(LS.RATE))   || 12;
+  budget = parseFloat(localStorage.getItem(LS.BUDGET)) || 1000;
+
+  document.getElementById('s-rate').value   = rate;
+  document.getElementById('s-budget').value = budget;
+
+  document.getElementById('s-rate').addEventListener('input', e => {
+    rate = parseFloat(e.target.value) || 0; save(); render();
+  });
+  document.getElementById('s-budget').addEventListener('input', e => {
+    budget = parseFloat(e.target.value) || 0; save(); render();
+  });
+
+  render();
+  tickClock();
+  setInterval(tickClock, 1000);
+  fetchTips(true);
+})();
+
+/* Service worker */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
+
+/* ══════════════════════════════════════════
+   CALCULATIONS
+══════════════════════════════════════════ */
+function kwhMonth(a) { return (a.watts * a.qty * a.hours * (FREQ[a.freq]||1) * 30) / 1000; }
+function costMonth(a) { return kwhMonth(a) * rate; }
+function calcTotals() {
+  let kwhT=0, costT=0, vamp=null, vampKwh=0;
+  appliances.forEach(a => {
+    const k=kwhMonth(a), c=costMonth(a);
+    kwhT+=k; costT+=c;
+    if(k>vampKwh){ vampKwh=k; vamp=a; }
+  });
+  return { kwhT, costT, vamp, vampKwh };
+}
+function appIcon(name) {
+  const n=name.toLowerCase();
+  if(n.includes('air')||n.includes('aircon')||n.includes('ac')) return '❄️';
+  if(n.includes('tv')||n.includes('tele')) return '📺';
+  if(n.includes('ref')||n.includes('fridge')) return '🧊';
+  if(n.includes('wash')) return '🫧';
+  if(n.includes('heat')||n.includes('water')) return '🔥';
+  if(n.includes('light')||n.includes('bulb')||n.includes('lamp')) return '💡';
+  if(n.includes('computer')||n.includes('pc')||n.includes('laptop')) return '🖥️';
+  if(n.includes('pump')||n.includes('motor')) return '⚙️';
+  if(n.includes('fan')) return '🌀';
+  if(n.includes('oven')||n.includes('microwave')||n.includes('cook')) return '🍽️';
+  return '🔌';
+}
+
+/* ══════════════════════════════════════════
+   RENDER
+══════════════════════════════════════════ */
+function render() {
+  const { kwhT, costT, vamp, vampKwh } = calcTotals();
+  const dailyKwh = kwhT / 30;
+  const pct = budget > 0 ? (costT / budget) * 100 : 0;
+
+  /* hero */
+  document.getElementById('h-bill').textContent = costT.toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const bbar = document.getElementById('bbar');
+  bbar.style.width = Math.min(pct,100)+'%';
+  bbar.className = 'bbar-fill'+(costT>budget?' over':pct>=80?' warn':'');
+  document.getElementById('b-used').textContent = '₱'+costT.toFixed(2);
+  document.getElementById('b-pct').textContent = budget>0 ? pct.toFixed(1)+'%' : '—';
+  if(budget===0) document.getElementById('b-remain').textContent='Set a budget';
+  else if(costT>budget) document.getElementById('b-remain').innerHTML='<span style="color:var(--coral)">₱'+(costT-budget).toFixed(2)+' over</span>';
+  else document.getElementById('b-remain').textContent='₱'+(budget-costT).toFixed(2)+' left';
+  document.getElementById('h-sub').textContent = appliances.length===0 ? 'Add appliances to start tracking' : `${appliances.length} appliance${appliances.length>1?'s':''} tracked`;
+
+  /* quick stats */
+  document.getElementById('q-kwh').textContent  = kwhT.toFixed(1);
+  document.getElementById('q-day').textContent  = dailyKwh.toFixed(1);
+  document.getElementById('q-count').textContent = appliances.length;
+
+  /* vampire */
+  if(vamp) {
+    document.getElementById('vamp-name').textContent   = esc(vamp.name);
+    document.getElementById('vamp-detail').textContent = vampKwh.toFixed(2)+' kWh/mo · ₱'+( vampKwh*rate).toFixed(2)+'/mo';
+  } else {
+    document.getElementById('vamp-name').textContent   = 'No appliances yet';
+    document.getElementById('vamp-detail').textContent = 'Add appliances to find your biggest consumer';
+  }
+
+  /* grade pill in header */
+  const gp = document.getElementById('grade-pill');
+  if(budget===0||appliances.length===0){ gp.textContent='?'; gp.className=''; }
+  else if(pct<=80){ gp.textContent='A'; gp.className='grade-A'; }
+  else if(pct<=100){ gp.textContent='C'; gp.className='grade-C'; }
+  else { gp.textContent='F'; gp.className='grade-F'; }
+
+  /* grade view */
+  renderGrade(pct);
+
+  /* lists */
+  renderHomeList();
+  renderInvList();
+
+  /* alerts */
+  renderAlerts(costT, pct);
+
+  /* grade breakdown */
+  renderBreakdown();
+}
+
+function renderGrade(pct) {
+  const ring = document.getElementById('big-grade');
+  const title = document.getElementById('big-grade-title');
+  const detail = document.getElementById('big-grade-detail');
+  ring.className = 'grade-ring';
+  if(budget===0||appliances.length===0){
+    ring.classList.add('q'); ring.textContent='?';
+    title.textContent='No Budget Set'; detail.textContent='Set a budget in Settings to see your grade.';
+  } else if(pct<=80){
+    ring.textContent='A';
+    title.textContent='Excellent — Grade A ✓'; detail.textContent='You\'re well within your monthly budget. Great energy discipline!';
+  } else if(pct<=100){
+    ring.classList.add('C'); ring.textContent='C';
+    title.textContent='Caution — Grade C ⚠'; detail.textContent='You\'re approaching your budget limit. Consider reducing usage.';
+  } else {
+    ring.classList.add('F'); ring.textContent='F';
+    title.textContent='Over Budget — Grade F ✗'; detail.textContent='You\'ve exceeded your budget. Act now to cut consumption.';
+  }
+}
+
+function renderBreakdown() {
+  const el = document.getElementById('grade-breakdown');
+  if(!appliances.length){ el.innerHTML='<div class="empty-state"><span class="emoji">📋</span><p>Add appliances to see breakdown.</p></div>'; return; }
+  const sorted=[...appliances].sort((a,b)=>costMonth(b)-costMonth(a));
+  el.innerHTML = sorted.map(a=>{
+    const k=kwhMonth(a).toFixed(1), c=costMonth(a).toFixed(2);
+    const pctOf = budget>0 ? ((costMonth(a)/budget)*100).toFixed(0) : '—';
+    return `<div class="leaf-card">
+      <div class="lc-icon">${appIcon(a.name)}</div>
+      <div class="lc-body">
+        <div class="lc-name">${esc(a.name)}</div>
+        <div class="lc-meta">${a.watts}W · ${FREQ_LBL[a.freq]||a.freq} · ${a.hours}h/day</div>
+      </div>
+      <div class="lc-right">
+        <div class="lc-kwh">${k} kWh</div>
+        <div class="lc-cost">₱${c} · ${pctOf}% of budget</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderHomeList() {
+  const el = document.getElementById('home-list');
+  const cnt = document.getElementById('home-count');
+  cnt.textContent = appliances.length+' item'+(appliances.length!==1?'s':'');
+  if(!appliances.length){
+    el.innerHTML='<div class="empty-state"><span class="emoji">🌱</span><p>No appliances added yet.<br>Tap <strong>+</strong> to add your first one!</p></div>';
+    return;
+  }
+  const sorted=[...appliances].sort((a,b)=>costMonth(b)-costMonth(a));
+  el.innerHTML = sorted.slice(0,5).map(a=>leafCard(a)).join('');
+  if(appliances.length>5){
+    el.innerHTML += `<div style="text-align:center;padding:10px;font-size:.82rem;color:var(--text-dim)">+${appliances.length-5} more — see Devices tab</div>`;
+  }
+}
+
+function renderInvList() {
+  const el = document.getElementById('inv-list');
+  const cnt = document.getElementById('inv-count');
+  cnt.textContent = appliances.length+' appliance'+(appliances.length!==1?'s':'');
+  if(!appliances.length){
+    el.innerHTML='<div class="empty-state"><span class="emoji">🌱</span><p>No appliances yet.<br>Tap <strong>+</strong> to start tracking!</p></div>';
+    return;
+  }
+  el.innerHTML = appliances.map(a=>leafCard(a, true)).join('');
+}
+
+function leafCard(a, showActions=false) {
+  const k=kwhMonth(a).toFixed(1), c=costMonth(a).toFixed(2);
+  const editing = a.id===editingId;
+  const actions = showActions ? `<div class="lc-actions">
+    <button class="lc-btn lc-btn-edit" onclick="startEdit('${esc(a.id)}')">✏️ Edit</button>
+    <button class="lc-btn lc-btn-del" onclick="deleteAppliance('${esc(a.id)}')">🗑 Delete</button>
+  </div>` : '';
+  return `<div class="leaf-card${editing?' editing':''}">
+    <div class="lc-icon">${appIcon(a.name)}</div>
+    <div class="lc-body">
+      <div class="lc-name">${esc(a.name)}</div>
+      <div class="lc-meta">${a.watts}W × ${a.qty} · ${FREQ_LBL[a.freq]||a.freq} · ${a.hours}h/day</div>
+      ${actions}
+    </div>
+    <div class="lc-right">
+      <div class="lc-kwh">${k} kWh</div>
+      <div class="lc-cost">₱${c}/mo</div>
+    </div>
+  </div>`;
+}
+
+function renderAlerts(costT, pct) {
+  const el = document.getElementById('alerts');
+  const msgs = [];
+  if(budget>0){
+    if(costT>budget) msgs.push({cls:'alert-danger',msg:'🚨 Over budget by ₱'+(costT-budget).toFixed(2)+'! Reduce appliance usage.'});
+    else if(pct>=80) msgs.push({cls:'alert-warn',msg:'⚠️ '+pct.toFixed(1)+'% of budget used. Monitor your consumption.'});
+  }
+  const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Manila'}));
+  if(now.getHours()>=18&&now.getHours()<21) msgs.push({cls:'alert-info',msg:'⚡ Peak hours (6–9 PM PHT) — defer heavy appliance use to save.'});
+  el.innerHTML=msgs.map(m=>`<div class="alert ${m.cls}">${m.msg}</div>`).join('');
+}
+
+/* ══════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════ */
+function switchView(name, btn) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('scroll-area').scrollTop=0;
+}
+
+/* ══════════════════════════════════════════
+   FORM SHEET
+══════════════════════════════════════════ */
+function openSheet() {
+  document.getElementById('form-sheet').classList.add('open');
+  document.getElementById('fab').classList.add('active');
+  setTimeout(()=>document.getElementById('f-name').focus(), 350);
+}
+function closeSheet() {
+  if(!editingId){ clearForm(); }
+  document.getElementById('form-sheet').classList.remove('open');
+  document.getElementById('fab').classList.remove('active');
+  if(editingId){ cancelEdit(); }
+}
+
+function submitForm() {
+  const name  = document.getElementById('f-name').value.trim();
+  const watts = parseFloat(document.getElementById('f-watts').value);
+  const qty   = parseInt(document.getElementById('f-qty').value);
+  const hours = parseFloat(document.getElementById('f-hours').value);
+  const freq  = document.getElementById('f-freq').value;
+
+  if(!name)         return vibrate(), alert('Please enter an appliance name.');
+  if(!watts||watts<=0) return vibrate(), alert('Watts must be a positive number.');
+  if(!qty||qty<1)   return vibrate(), alert('Quantity must be at least 1.');
+  if(isNaN(hours)||hours<0) return vibrate(), alert('Hours must be 0 or more.');
+  if(hours>24)      return vibrate(), alert('Hours cannot exceed 24.');
+  if(hours===0&&!confirm('Zero hours — no energy consumed. Continue?')) return;
+
+  if(editingId) {
+    const idx=appliances.findIndex(a=>a.id===editingId);
+    if(idx>-1) appliances[idx]={...appliances[idx],name,watts,qty,hours,freq};
+    editingId=null;
+  } else {
+    appliances.push({id:uid(),name,watts,qty,hours,freq});
+  }
+
+  clearForm();
+  document.getElementById('form-sheet').classList.remove('open');
+  document.getElementById('fab').classList.remove('active');
+  document.getElementById('sheet-title').textContent='Add Appliance';
+  document.getElementById('btn-submit').textContent='Add Appliance';
+  save(); render(); fetchTips();
+}
+
+function startEdit(id) {
+  const a=appliances.find(x=>x.id===id);
+  if(!a) return;
+  editingId=id;
+  document.getElementById('f-name').value  = a.name;
+  document.getElementById('f-watts').value = a.watts;
+  document.getElementById('f-qty').value   = a.qty;
+  document.getElementById('f-hours').value = a.hours;
+  document.getElementById('f-freq').value  = a.freq;
+  document.getElementById('sheet-title').textContent='Edit Appliance';
+  document.getElementById('btn-submit').textContent='💾 Save Changes';
+  openSheet();
+  render();
+}
+function cancelEdit() {
+  editingId=null; clearForm();
+  document.getElementById('sheet-title').textContent='Add Appliance';
+  document.getElementById('btn-submit').textContent='Add Appliance';
+  render();
+}
+function clearForm() {
+  ['f-name','f-watts','f-hours'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-qty').value='1';
+  document.getElementById('f-freq').value='daily';
+}
+function deleteAppliance(id) {
+  if(!confirm('Delete this appliance?')) return;
+  appliances=appliances.filter(a=>a.id!==id);
+  if(editingId===id) cancelEdit();
+  save(); render(); fetchTips();
+}
+function clearAll() {
+  if(!confirm('Remove ALL appliances? This cannot be undone.')) return;
+  appliances=[]; editingId=null;
+  closeSheet(); save(); render(); fetchTips(true);
+}
+function resetDefaults() {
+  rate=12; budget=1000;
+  document.getElementById('s-rate').value=rate;
+  document.getElementById('s-budget').value=budget;
+  save(); render();
+}
+
+/* ══════════════════════════════════════════
+   CLOCK
+══════════════════════════════════════════ */
+function tickClock() {
+  const pht=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Manila'}));
+  const h=pht.getHours(),m=String(pht.getMinutes()).padStart(2,'0'),s=String(pht.getSeconds()).padStart(2,'0');
+  const ampm=h>=12?'PM':'AM', h12=h%12||12;
+  document.getElementById('clock').textContent=`${h12}:${m}:${s} ${ampm} PHT`;
+  const peak=document.getElementById('peak-pill');
+  peak.style.display=(h>=18&&h<21)?'flex':'none';
+}
+
+/* ══════════════════════════════════════════
+   SAVING TIPS (AI)
+══════════════════════════════════════════ */
+function buildContext() {
+  const {kwhT,costT,vamp,vampKwh}=calcTotals();
+  const pct=budget>0?((costT/budget)*100).toFixed(1):null;
+  const sorted=[...appliances].sort((a,b)=>kwhMonth(b)-kwhMonth(a))
+    .map(a=>({name:a.name,watts:a.watts,qty:a.qty,hours:a.hours,freq:a.freq,kwh:+kwhMonth(a).toFixed(2),cost:+costMonth(a).toFixed(2)}));
+  let ctx=`Rate: ₱${rate}/kWh | Budget: ₱${budget||'not set'} | Bill: ₱${costT.toFixed(2)} | Used: ${pct||'N/A'}% | Total: ${kwhT.toFixed(2)} kWh/mo\n`;
+  if(vamp) ctx+=`Biggest consumer: ${vamp.name} (${vampKwh.toFixed(2)} kWh/mo)\n`;
+  ctx+=`Appliances:\n`+sorted.map((a,i)=>`${i+1}. ${a.name}: ${a.watts}W×${a.qty}, ${a.hours}h/day, ${a.freq} → ${a.kwh} kWh/mo, ₱${a.cost}/mo`).join('\n');
+  return ctx;
+}
+
+async function fetchTips(force=false) {
+  if(tipsFetching) return;
+  const hash=JSON.stringify({appliances,rate,budget});
+  if(!force&&hash===tipsHash) return;
+  tipsHash=hash;
+
+  const el=document.getElementById('tips-container');
+
+  if(!appliances.length) {
+    el.innerHTML='<div class="empty-state"><span class="emoji">💡</span><p>Add appliances to get personalized saving tips!</p></div>';
+    return;
+  }
+
+  tipsFetching=true;
+  const btn=document.getElementById('btn-refresh');
+  const ico=document.getElementById('ref-icon');
+  btn.disabled=true; ico.className='spin'; ico.textContent='⏳';
+  el.innerHTML='<div class="tips-loading"><span>Generating your tips…</span><div class="dots"><span></span><span></span><span></span></div></div>';
+
+  const prompt=`You are an energy-saving expert for Philippine households. Analyze this data and give exactly 6 highly specific, actionable saving tips referencing the user's actual appliances and real numbers.
+
+${buildContext()}
+
+Return ONLY a valid JSON array with 6 objects. Each object must have:
+- "icon": single emoji
+- "title": short punchy title (max 6 words)
+- "advice": specific tip referencing actual appliance names and real numbers (2–3 sentences)
+- "saving": estimated monthly saving like "~₱120/mo" or "~5 kWh/mo" (realistic, not inflated)
+
+Focus: if over budget → urgent cuts for top consumers. If near limit → moderate reductions. If healthy → efficiency tips. Mix scheduling, settings, habits, maintenance, upgrades. Reference peak hours (6–9 PM PHT). Return ONLY the JSON array.`;
+
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    const raw=(data.content||[]).map(b=>b.text||'').join('').trim();
+    const clean=raw.replace(/^```json\s*/i,'').replace(/```\s*$/,'').trim();
+    const tips=JSON.parse(clean);
+    if(!Array.isArray(tips)||!tips.length) throw new Error('bad');
+    el.innerHTML=tips.map(t=>`
+      <div class="tip-card">
+        <div class="tip-ico">${esc(t.icon||'💡')}</div>
+        <div class="tip-body">
+          <div class="tip-title">${esc(t.title||'')}</div>
+          <div class="tip-text">${esc(t.advice||'')}</div>
+          ${t.saving?`<span class="tip-save">${esc(t.saving)}</span>`:''}
+        </div>
+      </div>`).join('');
+  } catch {
+    el.innerHTML = buildFallbackTips();
+  } finally {
+    tipsFetching=false;
+    btn.disabled=false; ico.className=''; ico.textContent='🔄';
+  }
+}
+
+function buildFallbackTips() {
+  const {kwhT,costT,vamp,vampKwh}=calcTotals();
+  const pct=budget>0?(costT/budget)*100:0;
+  const sorted=[...appliances].sort((a,b)=>kwhMonth(b)-kwhMonth(a));
+  const pool=[];
+  if(vamp) pool.push({icon:'⚡',title:`Cut ${vamp.name} Usage`,advice:`Your ${vamp.name} consumes ${vampKwh.toFixed(1)} kWh/month. Reducing its daily run time by 1 hour could meaningfully lower your bill.`,saving:`~₱${(vamp.watts*vamp.qty*1*(FREQ[vamp.freq]||1)*30/1000*rate).toFixed(0)}/mo`});
+  sorted.slice(0,2).forEach(a=>{
+    if(a.freq==='daily'&&a.hours>=4) pool.push({icon:'🕕',title:'Shift to Off-Peak',advice:`Run your ${a.name} before 6 PM or after 9 PM PHT to avoid peak-hour demand charges.`,saving:'~10–15% on peak loads'});
+    if(a.watts>800) pool.push({icon:'🌡️',title:`Optimize ${a.name}`,advice:`Your ${a.name} (${a.watts}W) can be set to a more efficient mode or temperature. Even a 10% reduction compounds over ${a.hours} daily hours.`,saving:`~₱${(a.watts*0.1*a.qty*a.hours*(FREQ[a.freq]||1)*30/1000*rate).toFixed(0)}/mo`});
+  });
+  pool.push({icon:'🔌',title:'Unplug Standby Devices',advice:'Appliances on standby silently consume 5–10% of your electricity. Unplug unused chargers, TVs, and gadgets or use a smart power strip.',saving:'~₱50–150/mo'});
+  pool.push({icon:'💡',title:'Switch to LED Lighting',advice:'LEDs use up to 80% less energy than incandescent bulbs and last significantly longer. Replace any remaining old bulbs for instant savings.',saving:'~₱80–200/mo'});
+  pool.push({icon:'🧊',title:'Clean Filters & Coils',advice:'Dirty aircon filters and refrigerator coils force appliances to work harder. Clean them every 2–3 months for peak efficiency.',saving:'~5–10% energy reduction'});
+  if(pct>100) pool.push({icon:'🚨',title:'Emergency: Reduce Now',advice:`You're ₱${(costT-budget).toFixed(0)} over budget. Temporarily cut your highest-use appliances' daily hours until you're back on track.`,saving:`₱${(costT-budget).toFixed(0)} overrun`});
+  return pool.slice(0,6).map(t=>`
+    <div class="tip-card">
+      <div class="tip-ico">${esc(t.icon)}</div>
+      <div class="tip-body">
+        <div class="tip-title">${esc(t.title)}</div>
+        <div class="tip-text">${esc(t.advice)}</div>
+        ${t.saving?`<span class="tip-save">${esc(t.saving)}</span>`:''}
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════════
+   IMPORT / EXPORT
+══════════════════════════════════════════ */
+function exportData() {
+  const blob=new Blob([JSON.stringify({appliances,rate,budget},null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='eco-saver-data.json'; a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importData(e) {
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try {
+      const d=JSON.parse(ev.target.result);
+      if(!Array.isArray(d.appliances)) throw new Error('Missing appliances');
+      for(const a of d.appliances){
+        if(typeof a.id!=='string') throw new Error('Bad id');
+        if(!a.name?.trim()) throw new Error('Bad name');
+        if(typeof a.watts!=='number'||a.watts<=0) throw new Error('Bad watts');
+        if(typeof a.qty!=='number'||a.qty<1) throw new Error('Bad qty');
+        if(typeof a.hours!=='number'||a.hours<0) throw new Error('Bad hours');
+        if(!FREQ[a.freq]) throw new Error('Bad freq: '+a.freq);
+      }
+      appliances=d.appliances;
+      if(typeof d.rate==='number'&&d.rate>0){ rate=d.rate; document.getElementById('s-rate').value=rate; }
+      if(typeof d.budget==='number'&&d.budget>=0){ budget=d.budget; document.getElementById('s-budget').value=budget; }
+      save(); render(); fetchTips(true);
+      alert(`✅ Imported ${appliances.length} appliance(s).`);
+    } catch(err){ alert('❌ Invalid file: '+err.message); }
+    e.target.value='';
+  };
+  r.readAsText(file);
+}
+function save() {
+  localStorage.setItem(LS.APP,JSON.stringify(appliances));
+  localStorage.setItem(LS.RATE,rate);
+  localStorage.setItem(LS.BUDGET,budget);
+}
+
+/* ══════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════ */
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function vibrate(){ try{navigator.vibrate&&navigator.vibrate(40)}catch{} }
+
+/* Enter key on form */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.getElementById('form-sheet').classList.contains('open')) closeSheet();
+  if(e.key==='Enter'&&['f-name','f-watts','f-qty','f-hours'].includes(e.target.id)) submitForm();
+});
+</script>
+</body>
+</html>
