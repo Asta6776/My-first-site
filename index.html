@@ -5,18 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
   <title>Eco‑Saver Pro</title>
 
-  <!-- PWA -->
   <meta name="theme-color" content="#1a3a2a"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="EcoSaver"/>
-  <link rel="manifest" href="/manifest.json"/>
+  <link rel="manifest" href="manifest.json"/>
 
-  <!-- Fonts: Fraunces (display) + DM Sans (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
   <style>
+/* ... (CSS remains unchanged) ... */
 /* ═══════════════════════════════════════════════
    TOKENS
 ═══════════════════════════════════════════════ */
@@ -555,7 +554,6 @@ body{
 </head>
 <body>
 
-<!-- ORGANIC BG -->
 <div id="bg-canvas">
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
@@ -563,10 +561,8 @@ body{
   <div class="blob blob-4"></div>
 </div>
 
-<!-- APP SHELL -->
 <div id="shell">
 
-  <!-- STATUS BAR -->
   <header id="status-bar">
     <div class="status-left">
       <div class="app-name">Eco<em>Saver</em> Pro</div>
@@ -578,14 +574,11 @@ body{
     </div>
   </header>
 
-  <!-- SCROLL AREA -->
   <div id="scroll-area">
 
-    <!-- ── DASHBOARD VIEW ── -->
     <div class="view active" id="view-home">
       <div id="alerts"></div>
 
-      <!-- Hero bill card -->
       <div class="hero-card">
         <div class="hero-label">Estimated Monthly Bill</div>
         <div class="hero-bill"><span>₱</span><span id="h-bill">0.00</span></div>
@@ -616,7 +609,6 @@ body{
         </div>
       </div>
 
-      <!-- Vampire -->
       <div class="vampire-card" id="vamp-card">
         <div class="vampire-icon">⚡</div>
         <div class="vampire-info">
@@ -626,7 +618,6 @@ body{
         </div>
       </div>
 
-      <!-- Appliance list preview -->
       <div class="sec-title">
         My Appliances
         <span class="sub" id="home-count">0 items</span>
@@ -639,7 +630,6 @@ body{
       </div>
     </div>
 
-    <!-- ── APPLIANCES VIEW ── -->
     <div class="view" id="view-appliances">
       <div class="sec-title">
         Energy Inventory
@@ -653,7 +643,6 @@ body{
       </div>
     </div>
 
-    <!-- ── TIPS VIEW ── -->
     <div class="view" id="view-tips">
       <div class="sec-actions">
         <div class="sec-title" style="margin:0">💡 Smart Saving Tips</div>
@@ -669,7 +658,6 @@ body{
       </div>
     </div>
 
-    <!-- ── GRADE VIEW ── -->
     <div class="view" id="view-grade">
       <div class="sec-title">Efficiency Report</div>
       <div class="grade-big">
@@ -677,12 +665,10 @@ body{
         <div class="grade-title" id="big-grade-title">No Budget Set</div>
         <div class="grade-detail" id="big-grade-detail">Set a budget in Settings to see your grade.</div>
       </div>
-      <!-- detailed breakdown -->
       <div class="sec-title">Breakdown</div>
       <div id="grade-breakdown"></div>
     </div>
 
-    <!-- ── SETTINGS VIEW ── -->
     <div class="view" id="view-settings">
       <div class="sec-title">Settings</div>
 
@@ -756,10 +742,7 @@ body{
       <div style="height:20px"></div>
     </div>
 
-  </div><!-- /scroll-area -->
-
-  <!-- BOTTOM NAV -->
-  <nav id="bottom-nav">
+  </div><nav id="bottom-nav">
     <button class="nav-btn active" onclick="switchView('home',this)" aria-label="Dashboard">
       <div class="nav-icon">🏠</div>
       <div class="nav-label">Home</div>
@@ -782,12 +765,8 @@ body{
     </button>
   </nav>
 
-</div><!-- /shell -->
+</div><button id="fab" onclick="openSheet()" aria-label="Add appliance">+</button>
 
-<!-- FAB -->
-<button id="fab" onclick="openSheet()" aria-label="Add appliance">+</button>
-
-<!-- ADD/EDIT SHEET -->
 <div id="form-sheet" role="dialog" aria-modal="true" aria-label="Add or edit appliance">
   <div class="sheet-backdrop" onclick="closeSheet()"></div>
   <div class="sheet-panel">
@@ -875,8 +854,9 @@ let tipsHash = '', tipsFetching = false;
 })();
 
 /* Service worker */
+/* FIX 2: Removed leading slash from service worker registration (Line 746) */
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 
 /* ══════════════════════════════════════════
