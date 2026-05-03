@@ -1,1309 +1,1208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
-  <title>Eco‑Saver Pro</title>
-
-  <meta name="theme-color" content="#1a3a2a"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="EcoSaver"/>
-  <link rel="manifest" href="manifest.json"/>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-
-  <style>
-/* ... (CSS remains unchanged) ... */
-/* ═══════════════════════════════════════════════
-   TOKENS
-═══════════════════════════════════════════════ */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d2218">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EcoSaver Pro">
+<title>EcoSaver Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
 :root {
-  --forest:    #0d2218;
-  --canopy:    #1a3a2a;
-  --moss:      #2d5a3d;
-  --fern:      #3d7a52;
-  --leaf:      #52a86e;
-  --lime:      #8fd48c;
-  --mist:      #c8e8c0;
-  --cream:     #f4f0e6;
-  --soil:      #8b6f47;
-  --amber:     #e8a030;
-  --coral:     #e05a4e;
-  --sky:       #6bb8d4;
-
-  --text-h:    #f4f0e6;
-  --text-b:    #c8dbc0;
-  --text-dim:  #7aaa85;
-  --text-dark: #1a3a2a;
-
-  --r-sm: 14px;
-  --r-md: 20px;
-  --r-lg: 28px;
-  --r-xl: 38px;
-
-  --safe-top:    env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-
+  --c0: #0d2218;
+  --c1: #1a3a2a;
+  --c2: #2d5a3d;
+  --c3: #3d7a52;
+  --c4: #52a86e;
+  --c5: #8fd48c;
+  --c6: #c8e8c0;
+  --c7: #f4f0e6;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --glass: rgba(29,58,42,0.55);
+  --glass2: rgba(45,90,61,0.4);
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 38px;
   --nav-h: 72px;
-  --header-h: 64px;
+  --top-h: 64px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bot: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--c0); }
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--c7);
+  position: relative;
+  overscroll-behavior: none;
 }
 
-/* ═══════════════════════════════════════════════
-   RESET
-═══════════════════════════════════════════════ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{height:100%;overflow:hidden}
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--forest);
-  color:var(--text-b);
-  height:100%; overflow:hidden;
-  -webkit-font-smoothing:antialiased;
+/* ---- BACKGROUND ---- */
+.bg-fixed {
+  position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at 20% 10%, #1a3a2a 0%, #0d2218 60%);
+  overflow: hidden;
+}
+.blob {
+  position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.35;
+  animation: blobDrift 18s ease-in-out infinite alternate;
+}
+.blob1 { width: 380px; height: 380px; background: #2d5a3d; top: -100px; left: -80px; animation-delay: 0s; }
+.blob2 { width: 280px; height: 280px; background: #3d7a52; bottom: 100px; right: -60px; animation-delay: -6s; }
+.blob3 { width: 200px; height: 200px; background: #52a86e; top: 40%; left: 50%; animation-delay: -12s; }
+@keyframes blobDrift {
+  0% { transform: translate(0,0) scale(1); }
+  100% { transform: translate(30px, 40px) scale(1.08); }
+}
+.leaf-overlay {
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 Q45 20 30 40 Q15 20 30 5Z' fill='none' stroke='%238fd48c' stroke-width='0.5' opacity='0.08'/%3E%3C/svg%3E");
+  background-size: 60px 60px;
 }
 
-/* ═══════════════════════════════════════════════
-   ORGANIC BACKGROUND
-═══════════════════════════════════════════════ */
-#bg-canvas{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  overflow:hidden;
+/* ---- LAYOUT ---- */
+#app { position: fixed; inset: 0; z-index: 1; display: flex; flex-direction: column; }
+.status-bar {
+  height: calc(var(--top-h) + var(--safe-top));
+  padding-top: var(--safe-top);
+  padding-left: calc(20px + var(--safe-l));
+  padding-right: calc(20px + var(--safe-r));
+  background: rgba(13,34,24,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(143,212,140,0.12);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; z-index: 10;
 }
-.blob{
-  position:absolute;border-radius:60% 40% 55% 45% / 50% 60% 40% 50%;
-  filter:blur(60px);opacity:.18;
-  animation:blobFloat 20s ease-in-out infinite alternate;
+.status-bar .app-name {
+  font-family: 'Fraunces', serif;
+  font-size: 20px; font-weight: 700; color: var(--c5);
+  letter-spacing: -0.5px;
 }
-.blob-1{width:340px;height:280px;background:var(--fern);top:-60px;left:-80px;animation-delay:0s}
-.blob-2{width:260px;height:320px;background:var(--leaf);top:30%;right:-100px;animation-delay:-7s}
-.blob-3{width:300px;height:260px;background:var(--moss);bottom:10%;left:-60px;animation-delay:-14s}
-.blob-4{width:200px;height:200px;background:var(--lime);top:55%;right:10%;animation-delay:-4s;opacity:.1}
-@keyframes blobFloat{
-  0%{transform:translate(0,0) scale(1) rotate(0deg)}
-  100%{transform:translate(20px,30px) scale(1.08) rotate(8deg)}
+.status-right { display: flex; align-items: center; gap: 10px; }
+.clock {
+  font-size: 12px; color: var(--c6); opacity: 0.8;
+  font-variant-numeric: tabular-nums;
+}
+.grade-pill {
+  font-size: 11px; font-weight: 700; padding: 3px 10px;
+  border-radius: 20px; letter-spacing: 0.5px;
+}
+.grade-pill.A { background: rgba(143,212,140,0.25); color: var(--c5); border: 1px solid rgba(143,212,140,0.4); }
+.grade-pill.C { background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); }
+.grade-pill.F { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.4); }
+
+.views-wrap {
+  flex: 1; overflow: hidden; position: relative;
+}
+.view {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  padding: 16px calc(16px + var(--safe-r)) calc(var(--nav-h) + var(--safe-bot) + 20px) calc(16px + var(--safe-l));
+  display: none;
+  -webkit-overflow-scrolling: touch;
+}
+.view.active { display: block; }
+
+.bottom-nav {
+  height: calc(var(--nav-h) + var(--safe-bot));
+  padding-bottom: var(--safe-bot);
+  padding-left: var(--safe-l);
+  padding-right: var(--safe-r);
+  background: rgba(13,34,24,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(143,212,140,0.12);
+  display: flex; align-items: flex-start; z-index: 10;
+  flex-shrink: 0;
+}
+.nav-tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding-top: 12px; gap: 4px; cursor: pointer;
+  color: rgba(200,232,192,0.45); transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+.nav-tab.active { color: var(--c5); }
+.nav-tab .nav-icon { font-size: 22px; }
+.nav-tab .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.3px; }
+.nav-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--c5); position: absolute;
+  bottom: -4px; opacity: 0; transition: opacity 0.2s;
+}
+.nav-tab.active .nav-dot { opacity: 1; }
+
+/* FAB */
+.fab {
+  position: fixed;
+  right: calc(20px + var(--safe-r));
+  bottom: calc(var(--nav-h) + var(--safe-bot) + 16px);
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--c4), var(--c3));
+  border: none; color: white; font-size: 28px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 20;
+  box-shadow: 0 4px 20px rgba(82,168,110,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.fab:active { transform: scale(0.93); box-shadow: 0 2px 10px rgba(82,168,110,0.3); }
+
+/* ---- CARDS ---- */
+.card {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(143,212,140,0.15);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 12px;
+}
+.card-lg { border-radius: var(--radius-lg); padding: 22px; }
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 14px; font-weight: 600;
+  color: var(--c5); letter-spacing: 0.5px;
+  text-transform: uppercase; margin-bottom: 12px;
+  opacity: 0.85;
 }
 
-/* leaf pattern overlay */
-#bg-canvas::after{
-  content:'';position:absolute;inset:0;
-  background-image:
-    radial-gradient(ellipse 1px 2px at 20% 30%, rgba(140,210,130,.15) 0%, transparent 100%),
-    radial-gradient(ellipse 1px 2px at 70% 20%, rgba(140,210,130,.10) 0%, transparent 100%),
-    radial-gradient(ellipse 1px 2px at 50% 70%, rgba(140,210,130,.12) 0%, transparent 100%);
-  background-size:80px 80px, 120px 120px, 100px 100px;
-}
+/* ---- ALERTS ---- */
+.alert { border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 10px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+.alert-warn { background: rgba(245,158,11,0.18); border: 1px solid rgba(245,158,11,0.35); color: #fde68a; }
+.alert-danger { background: rgba(239,68,68,0.18); border: 1px solid rgba(239,68,68,0.35); color: #fca5a5; }
 
-/* ═══════════════════════════════════════════════
-   APP SHELL
-═══════════════════════════════════════════════ */
-#shell{
-  position:fixed;inset:0;z-index:1;
-  display:flex;flex-direction:column;
-  padding-top:var(--safe-top);
-  padding-bottom:var(--safe-bottom);
+/* ---- HERO CARD ---- */
+.hero-card {
+  background: linear-gradient(135deg, rgba(45,90,61,0.7), rgba(29,58,42,0.8));
+  border: 1px solid rgba(143,212,140,0.2);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 12px;
 }
+.hero-label { font-size: 12px; color: var(--c6); opacity: 0.7; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+.hero-amount {
+  font-family: 'Fraunces', serif;
+  font-size: 48px; font-weight: 900; color: var(--c6);
+  line-height: 1; letter-spacing: -2px; margin-bottom: 16px;
+}
+.hero-amount span { font-size: 24px; opacity: 0.7; vertical-align: super; }
+.progress-bar { height: 8px; border-radius: 4px; background: rgba(143,212,140,0.15); overflow: hidden; margin-bottom: 8px; }
+.progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+.progress-fill.green { background: linear-gradient(90deg, var(--c4), var(--c5)); }
+.progress-fill.amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.progress-fill.red { background: linear-gradient(90deg, #ef4444, #f87171); }
+.budget-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--c6); opacity: 0.65; }
 
-/* ═══════════════════════════════════════════════
-   TOP STATUS BAR
-═══════════════════════════════════════════════ */
-#status-bar{
-  flex-shrink:0;height:var(--header-h);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;
-  background:rgba(13,34,24,.7);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(82,168,110,.15);
+/* QUICK STATS */
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.stat-card {
+  background: var(--glass); border: 1px solid rgba(143,212,140,0.12);
+  border-radius: var(--radius-md); padding: 14px 10px; text-align: center;
 }
-.status-left{display:flex;flex-direction:column}
-.app-name{
-  font-family:'Fraunces',serif;font-weight:800;font-size:1.15rem;
-  color:var(--text-h);letter-spacing:-.3px;line-height:1;
-}
-.app-name em{font-style:italic;color:var(--lime)}
-#clock{font-size:.72rem;color:var(--text-dim);margin-top:2px;font-variant-numeric:tabular-nums}
-.status-right{display:flex;align-items:center;gap:8px}
-#peak-pill{
-  display:none;background:rgba(232,160,48,.18);
-  border:1px solid rgba(232,160,48,.4);color:var(--amber);
-  border-radius:20px;padding:3px 10px;font-size:.7rem;font-weight:700;
-  animation:pulse 1.8s infinite;
-}
-#grade-pill{
-  width:36px;height:36px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Fraunces',serif;font-weight:800;font-size:1rem;
-  background:rgba(82,168,110,.2);border:2px solid var(--leaf);
-  color:var(--lime);transition:all .4s ease;
-}
-#grade-pill.grade-C{background:rgba(232,160,48,.2);border-color:var(--amber);color:var(--amber)}
-#grade-pill.grade-F{background:rgba(224,90,78,.2);border-color:var(--coral);color:var(--coral)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.stat-val { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--c5); }
+.stat-label { font-size: 10px; color: var(--c6); opacity: 0.6; margin-top: 2px; }
 
-/* ═══════════════════════════════════════════════
-   SCROLL AREA
-═══════════════════════════════════════════════ */
-#scroll-area{
-  flex:1;overflow-y:auto;overflow-x:hidden;
-  -webkit-overflow-scrolling:touch;
-  scroll-snap-type:none;
-}
-#scroll-area::-webkit-scrollbar{display:none}
+/* VAMPIRE */
+.vampire-card { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; }
+.vampire-name { font-weight: 600; font-size: 15px; color: #fca5a5; }
+.vampire-sub { font-size: 12px; color: rgba(252,165,165,0.7); margin-top: 2px; }
 
-/* ═══════════════════════════════════════════════
-   VIEWS (tabs)
-═══════════════════════════════════════════════ */
-.view{display:none;padding:16px 16px 24px;animation:viewIn .3s ease both}
-.view.active{display:block}
-@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* ANECO */
+.aneco-section { margin-bottom: 12px; }
+.aneco-toggle-btn {
+  width: 100%; background: var(--glass); border: 1px solid rgba(143,212,140,0.15);
+  border-radius: var(--radius-md); padding: 14px 18px;
+  color: var(--c6); font-size: 13px; font-weight: 500;
+  display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.aneco-toggle-btn .chevron { transition: transform 0.3s; font-size: 16px; }
+.aneco-toggle-btn.open .chevron { transform: rotate(180deg); }
+.aneco-body {
+  max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+  background: var(--glass); border: 1px solid rgba(143,212,140,0.1);
+  border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md);
+  margin-top: -4px;
+}
+.aneco-body.open { max-height: 700px; }
+.aneco-inner { padding: 16px; }
+.aneco-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(143,212,140,0.07); font-size: 13px; }
+.aneco-row:last-child { border-bottom: none; }
+.aneco-row.total { font-weight: 700; color: var(--c5); font-size: 14px; border-top: 1px solid rgba(143,212,140,0.25); margin-top: 4px; padding-top: 10px; }
+.aneco-row.subtotal { font-weight: 600; color: var(--c6); }
+.aneco-row .r-val { font-family: 'Fraunces', serif; font-size: 13px; font-weight: 600; }
+.aneco-label { font-size: 10px; color: var(--c4); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase; }
 
-/* ═══════════════════════════════════════════════
-   ALERTS STRIP
-═══════════════════════════════════════════════ */
-#alerts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.alert{
-  border-radius:var(--r-sm);padding:10px 14px;
-  font-size:.82rem;font-weight:500;display:flex;align-items:flex-start;gap:8px;
-  line-height:1.4;
-}
-.alert-warn{background:rgba(232,160,48,.12);border:1px solid rgba(232,160,48,.3);color:var(--amber)}
-.alert-danger{background:rgba(224,90,78,.12);border:1px solid rgba(224,90,78,.35);color:var(--coral)}
-.alert-info{background:rgba(82,168,110,.1);border:1px solid rgba(82,168,110,.25);color:var(--lime)}
+/* TOP 5 */
+.appliance-mini { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(143,212,140,0.08); }
+.appliance-mini:last-child { border-bottom: none; }
+.mini-left { display: flex; align-items: center; gap: 10px; }
+.mini-emoji { font-size: 22px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(143,212,140,0.1); border-radius: 10px; }
+.mini-name { font-size: 13px; font-weight: 500; color: var(--c7); }
+.mini-kwh { font-size: 11px; color: var(--c6); opacity: 0.6; }
+.mini-cost { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 700; color: var(--c5); }
 
-/* ═══════════════════════════════════════════════
-   HERO CARD (Dashboard)
-═══════════════════════════════════════════════ */
-.hero-card{
-  background:linear-gradient(145deg,var(--canopy),var(--moss));
-  border:1px solid rgba(82,168,110,.25);
-  border-radius:var(--r-xl);
-  padding:24px 22px 20px;
-  margin-bottom:14px;
-  position:relative;overflow:hidden;
-}
-.hero-card::before{
-  content:'🌿';position:absolute;
-  right:-14px;top:-20px;font-size:120px;opacity:.06;
-  transform:rotate(20deg);pointer-events:none;
-  filter:saturate(0);
-}
-.hero-label{
-  font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--text-dim);margin-bottom:6px;
-}
-.hero-bill{
-  font-family:'Fraunces',serif;font-size:3.2rem;font-weight:800;
-  color:var(--text-h);line-height:1;letter-spacing:-2px;
-}
-.hero-bill span{font-size:1.6rem;color:var(--lime);vertical-align:super;font-size:1.4rem}
-.hero-sub{font-size:.82rem;color:var(--text-dim);margin-top:4px;margin-bottom:18px}
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 48px 24px; }
+.empty-icon { font-size: 64px; margin-bottom: 16px; }
+.empty-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: var(--c6); margin-bottom: 8px; }
+.empty-sub { font-size: 14px; color: var(--c6); opacity: 0.55; line-height: 1.5; }
 
-/* budget bar */
-.bbar-track{height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;margin-bottom:8px}
-.bbar-fill{
-  height:100%;border-radius:4px;
-  background:linear-gradient(90deg,var(--leaf),var(--lime));
-  transition:width .7s cubic-bezier(.4,0,.2,1),background .4s;
+/* DEVICES */
+.device-card { margin-bottom: 10px; }
+.device-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.device-emoji { font-size: 28px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: rgba(143,212,140,0.1); border-radius: 14px; flex-shrink: 0; }
+.device-name { font-size: 15px; font-weight: 600; color: var(--c7); }
+.device-spec { font-size: 12px; color: var(--c6); opacity: 0.6; margin-top: 2px; }
+.device-stats { display: flex; gap: 16px; margin-bottom: 12px; }
+.device-stat { text-align: center; }
+.device-stat .val { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: var(--c5); }
+.device-stat .lbl { font-size: 10px; color: var(--c6); opacity: 0.55; }
+.device-actions { display: flex; gap: 8px; }
+.btn-sm {
+  flex: 1; padding: 8px; border-radius: 10px; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: opacity 0.2s;
 }
-.bbar-fill.warn{background:linear-gradient(90deg,var(--amber),#ffc06a)}
-.bbar-fill.over{background:linear-gradient(90deg,var(--coral),#ff8f84)}
-.bbar-nums{display:flex;justify-content:space-between;font-size:.76rem;color:var(--text-dim)}
-.bbar-nums .hi{color:var(--text-h);font-weight:600}
+.btn-edit { background: rgba(82,168,110,0.2); color: var(--c5); border: 1px solid rgba(82,168,110,0.3); }
+.btn-delete { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+.btn-sm:active { opacity: 0.7; }
 
-/* quick stats row */
-.qstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
-.qstat{
-  background:rgba(255,255,255,.06);border-radius:var(--r-md);
-  padding:12px 10px;text-align:center;
+/* TIPS */
+.tip-card { margin-bottom: 10px; position: relative; overflow: hidden; }
+.tip-emoji { font-size: 28px; margin-bottom: 8px; }
+.tip-title { font-size: 14px; font-weight: 600; color: var(--c6); margin-bottom: 6px; }
+.tip-body { font-size: 13px; color: var(--c6); opacity: 0.75; line-height: 1.55; margin-bottom: 8px; }
+.tip-saving { display: inline-block; background: rgba(143,212,140,0.15); border: 1px solid rgba(143,212,140,0.25); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--c5); }
+.tips-refresh-btn {
+  width: 100%; background: rgba(82,168,110,0.15); border: 1px solid rgba(82,168,110,0.3);
+  border-radius: var(--radius-md); padding: 12px; color: var(--c5); font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
 }
-.qstat-val{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;color:var(--text-h);line-height:1}
-.qstat-lbl{font-size:.62rem;color:var(--text-dim);margin-top:3px;text-transform:uppercase;letter-spacing:.8px}
+.tips-refresh-btn:active { opacity: 0.7; }
+.loading-dots { display: flex; gap: 6px; justify-content: center; padding: 40px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c4); animation: dotPulse 1.2s ease-in-out infinite; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotPulse { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
 
-/* ═══════════════════════════════════════════════
-   SECTION TITLE
-═══════════════════════════════════════════════ */
-.sec-title{
-  font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;
-  color:var(--text-h);margin:18px 0 10px;
-  display:flex;align-items:center;justify-content:space-between;
+/* GRADE */
+.grade-big {
+  text-align: center; padding: 32px 24px 20px;
 }
-.sec-title .sub{font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--text-dim);font-weight:400}
+.grade-letter {
+  font-family: 'Fraunces', serif;
+  font-size: 120px; font-weight: 900; line-height: 1;
+  margin-bottom: 12px;
+}
+.grade-letter.A { color: var(--c5); text-shadow: 0 0 40px rgba(143,212,140,0.4); }
+.grade-letter.C { color: #fbbf24; text-shadow: 0 0 40px rgba(251,191,36,0.3); }
+.grade-letter.F { color: #f87171; text-shadow: 0 0 40px rgba(248,113,113,0.3); }
+.grade-msg { font-size: 15px; color: var(--c6); opacity: 0.75; line-height: 1.5; }
+.grade-appliance-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(143,212,140,0.08); }
+.grade-appliance-row:last-child { border-bottom: none; }
+.ga-left { display: flex; align-items: center; gap: 10px; }
+.ga-right { text-align: right; }
+.ga-pct { font-family: 'Fraunces', serif; font-size: 13px; color: var(--c5); font-weight: 700; }
 
-/* ═══════════════════════════════════════════════
-   VAMPIRE CARD
-═══════════════════════════════════════════════ */
-.vampire-card{
-  background:rgba(224,90,78,.08);
-  border:1px solid rgba(224,90,78,.2);
-  border-radius:var(--r-lg);padding:16px 18px;
-  display:flex;align-items:center;gap:14px;margin-bottom:14px;
+/* SETTINGS */
+.settings-group { margin-bottom: 16px; }
+.settings-label { font-size: 12px; color: var(--c5); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+.settings-input {
+  width: 100%; background: rgba(13,34,24,0.6); border: 1px solid rgba(143,212,140,0.2);
+  border-radius: var(--radius-sm); padding: 12px 16px; color: var(--c7);
+  font-family: 'DM Sans', sans-serif; font-size: 15px;
+  outline: none; transition: border-color 0.2s;
 }
-.vampire-icon{font-size:2rem;flex-shrink:0;filter:drop-shadow(0 0 8px rgba(224,90,78,.4))}
-.vampire-info .label{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--coral);font-weight:700;margin-bottom:2px}
-.vampire-info .name{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--text-h);line-height:1.2}
-.vampire-info .detail{font-size:.78rem;color:var(--text-dim);margin-top:2px}
+.settings-input:focus { border-color: rgba(143,212,140,0.5); }
+.settings-btn {
+  width: 100%; padding: 13px; border-radius: var(--radius-sm); border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+  cursor: pointer; margin-bottom: 8px; transition: opacity 0.2s;
+}
+.settings-btn:active { opacity: 0.7; }
+.btn-primary { background: linear-gradient(135deg, var(--c4), var(--c3)); color: white; }
+.btn-secondary { background: rgba(143,212,140,0.12); color: var(--c5); border: 1px solid rgba(143,212,140,0.25); }
+.btn-danger { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+.about-text { font-size: 12px; color: var(--c6); opacity: 0.5; line-height: 1.7; }
 
-/* ═══════════════════════════════════════════════
-   LEAF CARDS (appliance list)
-═══════════════════════════════════════════════ */
-.leaf-card{
-  background:var(--canopy);
-  border:1px solid rgba(82,168,110,.15);
-  border-radius:var(--r-lg);
-  padding:14px 16px;
-  margin-bottom:10px;
-  display:flex;align-items:center;gap:12px;
-  transition:border-color .2s,background .2s;
-  position:relative;overflow:hidden;
+/* SHEET MODAL */
+.sheet-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 30;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  backdrop-filter: blur(4px);
 }
-.leaf-card::after{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:linear-gradient(180deg,var(--leaf),var(--lime));
-  border-radius:2px 0 0 2px;
+.sheet-overlay.open { opacity: 1; pointer-events: all; }
+.sheet {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 31;
+  background: linear-gradient(180deg, #1a3a2a 0%, #0d2218 100%);
+  border-top: 1px solid rgba(143,212,140,0.2);
+  border-radius: 24px 24px 0 0;
+  padding: 0 20px calc(24px + var(--safe-bot));
+  max-height: 92vh; overflow-y: auto;
+  transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
 }
-.leaf-card.editing{
-  border-color:rgba(143,212,140,.5);
-  background:rgba(82,168,110,.08);
+.sheet.open { transform: translateY(0); }
+.sheet-handle { width: 40px; height: 4px; background: rgba(143,212,140,0.25); border-radius: 2px; margin: 12px auto 20px; }
+.sheet-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--c6); margin-bottom: 20px; }
+.form-group { margin-bottom: 16px; }
+.form-label { font-size: 12px; color: var(--c5); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+.form-input {
+  width: 100%; background: rgba(13,34,24,0.6); border: 1px solid rgba(143,212,140,0.2);
+  border-radius: var(--radius-sm); padding: 13px 16px; color: var(--c7);
+  font-family: 'DM Sans', sans-serif; font-size: 15px;
+  outline: none; transition: border-color 0.2s;
 }
-.lc-icon{
-  width:44px;height:44px;border-radius:var(--r-sm);flex-shrink:0;
-  background:rgba(82,168,110,.12);border:1px solid rgba(82,168,110,.2);
-  display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+.form-input:focus { border-color: rgba(143,212,140,0.5); }
+.form-input.error { border-color: rgba(239,68,68,0.5); }
+.form-select {
+  width: 100%; background: rgba(13,34,24,0.6); border: 1px solid rgba(143,212,140,0.2);
+  border-radius: var(--radius-sm); padding: 13px 16px; color: var(--c7);
+  font-family: 'DM Sans', sans-serif; font-size: 15px;
+  outline: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238fd48c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 16px center;
 }
-.lc-body{flex:1;min-width:0}
-.lc-name{font-weight:600;font-size:.9rem;color:var(--text-h);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lc-meta{font-size:.74rem;color:var(--text-dim);margin-top:1px}
-.lc-right{text-align:right;flex-shrink:0}
-.lc-kwh{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:var(--lime);line-height:1}
-.lc-cost{font-size:.74rem;color:var(--text-dim);margin-top:1px}
-.lc-actions{display:flex;gap:6px;margin-top:8px}
-.lc-btn{
-  flex:1;padding:6px;border-radius:8px;border:1px solid;
-  font-family:'DM Sans',sans-serif;font-size:.74rem;font-weight:600;
-  cursor:pointer;transition:all .2s;
-}
-.lc-btn-edit{background:rgba(82,168,110,.1);border-color:rgba(82,168,110,.3);color:var(--leaf)}
-.lc-btn-edit:hover{background:rgba(82,168,110,.2)}
-.lc-btn-del{background:rgba(224,90,78,.1);border-color:rgba(224,90,78,.3);color:var(--coral)}
-.lc-btn-del:hover{background:rgba(224,90,78,.2)}
+.form-error { font-size: 12px; color: #f87171; margin-top: 4px; }
+.seg-switch { display: flex; background: rgba(13,34,24,0.6); border: 1px solid rgba(143,212,140,0.2); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+.seg-btn { flex: 1; padding: 10px; border: none; background: transparent; color: rgba(200,232,192,0.5); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.2s, color 0.2s; }
+.seg-btn.active { background: rgba(82,168,110,0.3); color: var(--c5); }
+.sheet-actions { display: flex; gap: 10px; margin-top: 20px; }
+.sheet-btn { flex: 1; padding: 14px; border-radius: var(--radius-md); border: none; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+.sheet-btn-save { background: linear-gradient(135deg, var(--c4), var(--c3)); color: white; }
+.sheet-btn-cancel { background: rgba(143,212,140,0.1); color: var(--c6); border: 1px solid rgba(143,212,140,0.2); }
+.sheet-btn:active { opacity: 0.8; }
 
-.empty-state{
-  text-align:center;padding:40px 20px;
-  background:var(--canopy);border:1px dashed rgba(82,168,110,.2);
-  border-radius:var(--r-xl);
+/* Toast */
+.toast {
+  position: fixed; bottom: calc(var(--nav-h) + var(--safe-bot) + 70px);
+  left: 50%; transform: translateX(-50%) translateY(20px);
+  background: rgba(29,58,42,0.95); color: var(--c6);
+  padding: 10px 20px; border-radius: 24px;
+  font-size: 13px; font-weight: 500;
+  border: 1px solid rgba(143,212,140,0.25);
+  backdrop-filter: blur(10px); z-index: 50;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
 }
-.empty-state .emoji{font-size:3rem;margin-bottom:10px;display:block}
-.empty-state p{font-size:.9rem;color:var(--text-dim);line-height:1.5}
-
-/* ═══════════════════════════════════════════════
-   TIPS CARDS
-═══════════════════════════════════════════════ */
-.tip-card{
-  background:var(--canopy);
-  border:1px solid rgba(82,168,110,.15);
-  border-radius:var(--r-lg);
-  padding:16px;
-  margin-bottom:10px;
-  display:flex;gap:14px;align-items:flex-start;
-  animation:viewIn .35s ease both;
-}
-.tip-card:nth-child(1){animation-delay:.04s}
-.tip-card:nth-child(2){animation-delay:.08s}
-.tip-card:nth-child(3){animation-delay:.12s}
-.tip-card:nth-child(4){animation-delay:.16s}
-.tip-card:nth-child(5){animation-delay:.20s}
-.tip-card:nth-child(6){animation-delay:.24s}
-.tip-ico{
-  font-size:1.7rem;flex-shrink:0;
-  filter:drop-shadow(0 2px 6px rgba(143,212,140,.25));
-}
-.tip-body .tip-title{font-weight:700;font-size:.9rem;color:var(--text-h);margin-bottom:4px}
-.tip-body .tip-text{font-size:.8rem;color:var(--text-dim);line-height:1.55}
-.tip-save{
-  display:inline-block;margin-top:8px;
-  background:rgba(143,212,140,.12);border:1px solid rgba(143,212,140,.25);
-  color:var(--lime);font-size:.72rem;font-weight:700;
-  border-radius:20px;padding:2px 10px;
-}
-
-.tips-loading{
-  display:flex;flex-direction:column;align-items:center;
-  padding:40px 20px;gap:14px;color:var(--text-dim);font-size:.9rem;
-}
-.dots{display:flex;gap:6px}
-.dots span{
-  width:8px;height:8px;border-radius:50%;background:var(--leaf);
-  animation:bounce .9s infinite;
-}
-.dots span:nth-child(2){animation-delay:.15s}
-.dots span:nth-child(3){animation-delay:.3s}
-@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
-
-/* ═══════════════════════════════════════════════
-   SETTINGS VIEW
-═══════════════════════════════════════════════ */
-.settings-section{
-  background:var(--canopy);border:1px solid rgba(82,168,110,.15);
-  border-radius:var(--r-xl);overflow:hidden;margin-bottom:14px;
-}
-.settings-row{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px;border-bottom:1px solid rgba(82,168,110,.08);
-}
-.settings-row:last-child{border-bottom:none}
-.sr-label{font-size:.88rem;color:var(--text-h);font-weight:500}
-.sr-sub{font-size:.74rem;color:var(--text-dim);margin-top:1px}
-.sr-right{display:flex;align-items:center;gap:8px}
-.settings-input{
-  background:rgba(255,255,255,.07);border:1px solid rgba(82,168,110,.25);
-  color:var(--text-h);border-radius:10px;padding:7px 12px;
-  font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;
-  width:100px;text-align:right;transition:border-color .2s,box-shadow .2s;
-}
-.settings-input:focus{outline:none;border-color:var(--leaf);box-shadow:0 0 0 3px rgba(82,168,110,.15)}
-.settings-input.wide{width:130px}
-
-.pill-btn{
-  padding:7px 16px;border-radius:20px;border:1px solid;
-  font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;
-  cursor:pointer;transition:all .2s;
-}
-.pill-btn-green{background:rgba(82,168,110,.12);border-color:rgba(82,168,110,.35);color:var(--leaf)}
-.pill-btn-green:hover{background:rgba(82,168,110,.22)}
-.pill-btn-red{background:rgba(224,90,78,.1);border-color:rgba(224,90,78,.3);color:var(--coral)}
-.pill-btn-red:hover{background:rgba(224,90,78,.2)}
-.pill-btn-amber{background:rgba(232,160,48,.1);border-color:rgba(232,160,48,.3);color:var(--amber)}
-.pill-btn-amber:hover{background:rgba(232,160,48,.2)}
-#file-input{display:none}
-
-/* ═══════════════════════════════════════════════
-   ADD/EDIT FORM (floating sheet)
-═══════════════════════════════════════════════ */
-#form-sheet{
-  position:fixed;inset:0;z-index:200;
-  display:none;flex-direction:column;justify-content:flex-end;
-}
-#form-sheet.open{display:flex}
-.sheet-backdrop{
-  position:absolute;inset:0;background:rgba(5,15,10,.7);
-  backdrop-filter:blur(6px);
-  animation:fadeIn .25s ease;
-}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.sheet-panel{
-  position:relative;z-index:1;
-  background:var(--canopy);
-  border-radius:var(--r-xl) var(--r-xl) 0 0;
-  padding:0 0 calc(20px + var(--safe-bottom));
-  max-height:92vh;overflow-y:auto;
-  animation:slideUp .32s cubic-bezier(.2,.8,.4,1);
-}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.sheet-handle{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.15);margin:12px auto 0}
-.sheet-header{
-  padding:16px 20px 12px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid rgba(82,168,110,.12);
-}
-.sheet-title{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700;color:var(--text-h)}
-.sheet-close{
-  width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;
-  background:rgba(255,255,255,.08);color:var(--text-dim);font-size:1rem;
-  display:flex;align-items:center;justify-content:center;transition:all .2s;
-}
-.sheet-close:hover{background:rgba(255,255,255,.14);color:var(--text-h)}
-.sheet-body{padding:18px 20px}
-
-.form-field{margin-bottom:14px}
-.field-label{font-size:.75rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;display:block}
-.field-input,.field-select{
-  width:100%;background:rgba(255,255,255,.06);
-  border:1.5px solid rgba(82,168,110,.2);
-  color:var(--text-h);border-radius:var(--r-sm);
-  padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:.95rem;
-  transition:border-color .2s,box-shadow .2s;
-  -webkit-appearance:none;
-}
-.field-input:focus,.field-select:focus{
-  outline:none;border-color:var(--leaf);box-shadow:0 0 0 3px rgba(82,168,110,.14);
-}
-.field-select option{background:#1a3a2a}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.field-hint{font-size:.72rem;color:var(--text-dim);margin-top:4px}
-
-.form-actions{display:flex;gap:10px;margin-top:18px}
-.btn-submit{
-  flex:1;padding:14px;border-radius:var(--r-md);border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--fern),var(--leaf));
-  color:var(--text-h);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;
-  transition:all .2s;box-shadow:0 4px 16px rgba(61,122,82,.3);
-}
-.btn-submit:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.btn-cancel-form{
-  padding:14px 18px;border-radius:var(--r-md);border:1px solid rgba(82,168,110,.25);
-  background:transparent;color:var(--text-dim);font-family:'DM Sans',sans-serif;
-  font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;
-}
-.btn-cancel-form:hover{border-color:var(--leaf);color:var(--text-h)}
-
-/* ═══════════════════════════════════════════════
-   FAB (Add button)
-═══════════════════════════════════════════════ */
-#fab{
-  position:fixed;
-  bottom:calc(var(--nav-h) + 16px + var(--safe-bottom));
-  right:20px;z-index:50;
-  width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--fern),var(--leaf));
-  color:var(--text-h);font-size:1.6rem;font-weight:300;
-  box-shadow:0 6px 24px rgba(61,122,82,.45),0 2px 8px rgba(0,0,0,.3);
-  display:flex;align-items:center;justify-content:center;
-  transition:all .25s cubic-bezier(.4,0,.2,1);
-}
-#fab:hover{transform:scale(1.08);box-shadow:0 8px 32px rgba(61,122,82,.55)}
-#fab.active{transform:rotate(45deg);background:linear-gradient(135deg,var(--coral),#ff8f84)}
-
-/* ═══════════════════════════════════════════════
-   BOTTOM NAV
-═══════════════════════════════════════════════ */
-#bottom-nav{
-  flex-shrink:0;height:calc(var(--nav-h) + var(--safe-bottom));
-  padding-bottom:var(--safe-bottom);
-  background:rgba(13,34,24,.85);
-  backdrop-filter:blur(24px);
-  border-top:1px solid rgba(82,168,110,.12);
-  display:flex;align-items:flex-start;padding-top:4px;
-  position:relative;z-index:10;
-}
-.nav-btn{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:8px 4px;gap:4px;border:none;background:transparent;cursor:pointer;
-  color:var(--text-dim);transition:color .2s;
-  -webkit-tap-highlight-color:transparent;
-}
-.nav-btn.active{color:var(--lime)}
-.nav-icon{
-  width:26px;height:26px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
-  transition:background .2s,transform .2s;
-}
-.nav-btn.active .nav-icon{
-  background:rgba(143,212,140,.15);
-  transform:translateY(-2px);
-}
-.nav-label{font-size:.62rem;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
-
-/* active indicator dot */
-.nav-btn.active::after{
-  content:'';width:4px;height:4px;border-radius:50%;
-  background:var(--lime);position:absolute;bottom:calc(var(--safe-bottom) + 6px);
-}
-
-/* ═══════════════════════════════════════════════
-   GRADE BADGE (view)
-═══════════════════════════════════════════════ */
-.grade-big{
-  display:flex;flex-direction:column;align-items:center;
-  background:var(--canopy);border:1px solid rgba(82,168,110,.2);
-  border-radius:var(--r-xl);padding:28px 20px;margin-bottom:14px;
-  position:relative;overflow:hidden;
-}
-.grade-big::before{
-  content:'';position:absolute;
-  width:200px;height:200px;border-radius:50%;
-  top:-60px;right:-60px;
-  background:radial-gradient(circle,rgba(82,168,110,.1),transparent 70%);
-}
-.grade-ring{
-  width:110px;height:110px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Fraunces',serif;font-size:3.2rem;font-weight:800;
-  border:3px solid var(--leaf);background:rgba(82,168,110,.1);
-  color:var(--lime);margin-bottom:14px;
-  box-shadow:0 0 30px rgba(82,168,110,.2),inset 0 0 20px rgba(82,168,110,.05);
-  transition:all .5s ease;
-}
-.grade-ring.C{border-color:var(--amber);background:rgba(232,160,48,.1);color:var(--amber);box-shadow:0 0 30px rgba(232,160,48,.2)}
-.grade-ring.F{border-color:var(--coral);background:rgba(224,90,78,.1);color:var(--coral);box-shadow:0 0 30px rgba(224,90,78,.2)}
-.grade-ring.q{border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.04);color:var(--text-dim)}
-.grade-title{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700;color:var(--text-h);margin-bottom:4px}
-.grade-detail{font-size:.84rem;color:var(--text-dim);text-align:center}
-
-/* scrollbar on sheet */
-.sheet-panel::-webkit-scrollbar{width:0}
-
-/* ═══════════════════════════════════════════════
-   MISC
-═══════════════════════════════════════════════ */
-.divider{height:1px;background:rgba(82,168,110,.08);margin:6px 0 16px}
-.refresh-btn{
-  display:flex;align-items:center;gap:6px;
-  background:rgba(82,168,110,.1);border:1px solid rgba(82,168,110,.25);
-  color:var(--leaf);border-radius:20px;padding:6px 14px;
-  font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;
-  cursor:pointer;transition:all .2s;margin-left:auto;display:flex;
-}
-.refresh-btn:hover{background:rgba(82,168,110,.2)}
-.refresh-btn:disabled{opacity:.5;cursor:not-allowed}
-.spin{display:inline-block;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.sec-actions{display:flex;align-items:center;justify-content:space-between;margin:18px 0 10px}
-
-  </style>
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
 </head>
 <body>
-
-<div id="bg-canvas">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-  <div class="blob blob-4"></div>
+<div class="bg-fixed">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="leaf-overlay"></div>
 </div>
 
-<div id="shell">
-
-  <header id="status-bar">
-    <div class="status-left">
-      <div class="app-name">Eco<em>Saver</em> Pro</div>
-      <div id="clock">Loading…</div>
-    </div>
+<div id="app">
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="app-name">🌿 EcoSaver Pro</div>
     <div class="status-right">
-      <div id="peak-pill">⚡ Peak</div>
-      <div id="grade-pill" class="grade-A" aria-label="Efficiency grade">A</div>
+      <div class="clock" id="clock">--:-- -- PHT</div>
+      <div class="grade-pill A" id="grade-pill">A</div>
     </div>
-  </header>
+  </div>
 
-  <div id="scroll-area">
-
+  <!-- VIEWS -->
+  <div class="views-wrap">
+    <!-- HOME -->
     <div class="view active" id="view-home">
-      <div id="alerts"></div>
+      <div id="alerts-area"></div>
 
       <div class="hero-card">
         <div class="hero-label">Estimated Monthly Bill</div>
-        <div class="hero-bill"><span>₱</span><span id="h-bill">0.00</span></div>
-        <div class="hero-sub" id="h-sub">Set your budget and add appliances to begin</div>
+        <div class="hero-amount" id="hero-amount"><span>₱</span><span id="hero-num">0.00</span></div>
+        <div class="progress-bar"><div class="progress-fill green" id="hero-progress" style="width:0%"></div></div>
+        <div class="budget-row"><span id="budget-used-lbl">₱0.00 used</span><span id="budget-left-lbl">₱1,000.00 left</span></div>
+      </div>
 
-        <div class="bbar-track">
-          <div class="bbar-fill" id="bbar" style="width:0%"></div>
-        </div>
-        <div class="bbar-nums">
-          <span>Used: <span class="hi" id="b-used">₱0.00</span></span>
-          <span id="b-pct">—</span>
-          <span id="b-remain">Budget: ₱1,000</span>
-        </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val" id="stat-kwh-mo">0</div><div class="stat-label">kWh/mo</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-kwh-day">0.0</div><div class="stat-label">kWh/day</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-count">0</div><div class="stat-label">Appliances</div></div>
+      </div>
 
-        <div class="qstats">
-          <div class="qstat">
-            <div class="qstat-val" id="q-kwh">0</div>
-            <div class="qstat-lbl">kWh/mo</div>
-          </div>
-          <div class="qstat">
-            <div class="qstat-val" id="q-day">0</div>
-            <div class="qstat-lbl">kWh/day</div>
-          </div>
-          <div class="qstat">
-            <div class="qstat-val" id="q-count">0</div>
-            <div class="qstat-lbl">Appliances</div>
-          </div>
+      <div id="vampire-area"></div>
+
+      <div class="aneco-section" id="aneco-section" style="display:none">
+        <button class="aneco-toggle-btn" id="aneco-toggle">
+          <span>🧾 ANECO Unbundled Bill Breakdown</span>
+          <span class="chevron">▼</span>
+        </button>
+        <div class="aneco-body" id="aneco-body">
+          <div class="aneco-inner" id="aneco-inner"></div>
         </div>
       </div>
 
-      <div class="vampire-card" id="vamp-card">
-        <div class="vampire-icon">⚡</div>
-        <div class="vampire-info">
-          <div class="label">Energy Vampire</div>
-          <div class="name" id="vamp-name">No appliances yet</div>
-          <div class="detail" id="vamp-detail">Add appliances to find your biggest consumer</div>
-        </div>
-      </div>
-
-      <div class="sec-title">
-        My Appliances
-        <span class="sub" id="home-count">0 items</span>
-      </div>
-      <div id="home-list">
-        <div class="empty-state">
-          <span class="emoji">🌱</span>
-          <p>No appliances added yet.<br>Tap <strong>+</strong> to add your first one!</p>
-        </div>
+      <div class="card">
+        <div class="section-title">Top Consumers</div>
+        <div id="top5-list"><div class="empty-state"><div class="empty-icon">🌱</div><div class="empty-title">No appliances yet</div><div class="empty-sub">Tap + to add your first appliance and start tracking your energy use.</div></div></div>
       </div>
     </div>
 
-    <div class="view" id="view-appliances">
-      <div class="sec-title">
-        Energy Inventory
-        <span class="sub" id="inv-count">0 appliances</span>
-      </div>
-      <div id="inv-list">
-        <div class="empty-state">
-          <span class="emoji">🌱</span>
-          <p>No appliances yet.<br>Tap <strong>+</strong> to start tracking!</p>
-        </div>
-      </div>
+    <!-- DEVICES -->
+    <div class="view" id="view-devices">
+      <div class="section-title" style="margin-bottom:16px;font-size:16px">My Appliances</div>
+      <div id="devices-list"></div>
     </div>
 
+    <!-- TIPS -->
     <div class="view" id="view-tips">
-      <div class="sec-actions">
-        <div class="sec-title" style="margin:0">💡 Smart Saving Tips</div>
-        <button class="refresh-btn" id="btn-refresh" onclick="fetchTips(true)">
-          <span id="ref-icon">🔄</span> Refresh
-        </button>
-      </div>
-      <div id="tips-container">
-        <div class="tips-loading">
-          <span>Generating your tips…</span>
-          <div class="dots"><span></span><span></span><span></span></div>
-        </div>
-      </div>
+      <div class="section-title" style="margin-bottom:16px;font-size:16px">Savings Tips</div>
+      <button class="tips-refresh-btn" id="tips-refresh-btn" style="display:none">🔄 Refresh Tips</button>
+      <div id="tips-content"></div>
     </div>
 
+    <!-- GRADE -->
     <div class="view" id="view-grade">
-      <div class="sec-title">Efficiency Report</div>
-      <div class="grade-big">
-        <div class="grade-ring q" id="big-grade">?</div>
-        <div class="grade-title" id="big-grade-title">No Budget Set</div>
-        <div class="grade-detail" id="big-grade-detail">Set a budget in Settings to see your grade.</div>
-      </div>
-      <div class="sec-title">Breakdown</div>
-      <div id="grade-breakdown"></div>
+      <div id="grade-content"></div>
     </div>
 
+    <!-- SETTINGS -->
     <div class="view" id="view-settings">
-      <div class="sec-title">Settings</div>
+      <div class="section-title" style="margin-bottom:16px;font-size:16px">Settings</div>
 
-      <div class="settings-section">
-        <div class="settings-row">
-          <div>
-            <div class="sr-label">Electricity Rate</div>
-            <div class="sr-sub">₱ per kWh</div>
-          </div>
-          <div class="sr-right">
-            <input type="number" class="settings-input" id="s-rate" min="0.01" step="0.01" value="12.00" aria-label="Rate"/>
-          </div>
+      <div class="card">
+        <div class="settings-group">
+          <div class="settings-label">Electricity Rate (₱/kWh)</div>
+          <input type="number" class="settings-input" id="s-rate" step="0.01" min="0.01">
         </div>
-        <div class="settings-row">
-          <div>
-            <div class="sr-label">Monthly Budget</div>
-            <div class="sr-sub">Target electricity spend</div>
-          </div>
-          <div class="sr-right">
-            <input type="number" class="settings-input wide" id="s-budget" min="0" step="50" value="1000" aria-label="Budget"/>
-          </div>
+        <div class="settings-group">
+          <div class="settings-label">Monthly Budget (₱)</div>
+          <input type="number" class="settings-input" id="s-budget" step="1" min="1">
         </div>
-        <div class="settings-row">
-          <div>
-            <div class="sr-label">Reset Defaults</div>
-            <div class="sr-sub">₱12.00/kWh · ₱1,000 budget</div>
-          </div>
-          <div class="sr-right">
-            <button class="pill-btn pill-btn-amber" onclick="resetDefaults()">Reset</button>
-          </div>
-        </div>
+        <button class="settings-btn btn-primary" id="s-save">Save Settings</button>
+        <button class="settings-btn btn-secondary" id="s-reset">Reset to Defaults</button>
       </div>
 
-      <div class="sec-title">Data</div>
-      <div class="settings-section">
-        <div class="settings-row">
-          <div>
-            <div class="sr-label">Export Data</div>
-            <div class="sr-sub">Save as JSON file</div>
-          </div>
-          <button class="pill-btn pill-btn-green" onclick="exportData()">📤 Export</button>
-        </div>
-        <div class="settings-row">
-          <div>
-            <div class="sr-label">Import Data</div>
-            <div class="sr-sub">Load from JSON file</div>
-          </div>
-          <button class="pill-btn pill-btn-green" onclick="document.getElementById('file-input').click()">📥 Import</button>
-          <input type="file" id="file-input" accept=".json" onchange="importData(event)"/>
-        </div>
-        <div class="settings-row">
-          <div>
-            <div class="sr-label">Clear All Appliances</div>
-            <div class="sr-sub">Remove everything</div>
-          </div>
-          <button class="pill-btn pill-btn-red" onclick="clearAll()">🗑 Clear</button>
-        </div>
+      <div class="card">
+        <div class="section-title">Data</div>
+        <button class="settings-btn btn-secondary" id="s-export">📤 Export JSON</button>
+        <button class="settings-btn btn-secondary" id="s-import-btn">📥 Import JSON</button>
+        <input type="file" id="s-import-file" accept=".json" style="display:none">
+        <button class="settings-btn btn-danger" id="s-clear">🗑️ Clear All Appliances</button>
       </div>
 
-      <div class="sec-title">About</div>
-      <div class="settings-section">
-        <div class="settings-row">
-          <div>
-            <div class="sr-label">Eco‑Saver Pro</div>
-            <div class="sr-sub">Version 2.0 · PWA · localStorage</div>
-          </div>
-          <span style="font-size:1.4rem">🌿</span>
-        </div>
-      </div>
-
-      <div style="height:20px"></div>
-    </div>
-
-  </div><nav id="bottom-nav">
-    <button class="nav-btn active" onclick="switchView('home',this)" aria-label="Dashboard">
-      <div class="nav-icon">🏠</div>
-      <div class="nav-label">Home</div>
-    </button>
-    <button class="nav-btn" onclick="switchView('appliances',this)" aria-label="Appliances">
-      <div class="nav-icon">🔌</div>
-      <div class="nav-label">Devices</div>
-    </button>
-    <button class="nav-btn" onclick="switchView('tips',this)" aria-label="Tips">
-      <div class="nav-icon">💡</div>
-      <div class="nav-label">Tips</div>
-    </button>
-    <button class="nav-btn" onclick="switchView('grade',this)" aria-label="Grade">
-      <div class="nav-icon">📊</div>
-      <div class="nav-label">Grade</div>
-    </button>
-    <button class="nav-btn" onclick="switchView('settings',this)" aria-label="Settings">
-      <div class="nav-icon">⚙️</div>
-      <div class="nav-label">Settings</div>
-    </button>
-  </nav>
-
-</div><button id="fab" onclick="openSheet()" aria-label="Add appliance">+</button>
-
-<div id="form-sheet" role="dialog" aria-modal="true" aria-label="Add or edit appliance">
-  <div class="sheet-backdrop" onclick="closeSheet()"></div>
-  <div class="sheet-panel">
-    <div class="sheet-handle"></div>
-    <div class="sheet-header">
-      <div class="sheet-title" id="sheet-title">Add Appliance</div>
-      <button class="sheet-close" onclick="closeSheet()" aria-label="Close">✕</button>
-    </div>
-    <div class="sheet-body">
-      <div class="form-field">
-        <label class="field-label" for="f-name">Appliance Name</label>
-        <input class="field-input" type="text" id="f-name" placeholder="e.g. Air Conditioner" maxlength="80"/>
-      </div>
-      <div class="field-row">
-        <div class="form-field">
-          <label class="field-label" for="f-watts">Power (Watts)</label>
-          <input class="field-input" type="number" id="f-watts" min="0.1" step="1" placeholder="e.g. 1500"/>
-        </div>
-        <div class="form-field">
-          <label class="field-label" for="f-qty">Quantity</label>
-          <input class="field-input" type="number" id="f-qty" min="1" step="1" value="1"/>
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="form-field">
-          <label class="field-label" for="f-hours">Hrs/Day</label>
-          <input class="field-input" type="number" id="f-hours" min="0" max="24" step="0.5" placeholder="e.g. 8"/>
-          <div class="field-hint">0–24 hours daily</div>
-        </div>
-        <div class="form-field">
-          <label class="field-label" for="f-freq">Frequency</label>
-          <select class="field-select" id="f-freq">
-            <option value="daily">Daily (7×/wk)</option>
-            <option value="3x">3× per Week</option>
-            <option value="weekends">Weekends Only</option>
-            <option value="1x">Once a Week</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-actions">
-        <button class="btn-cancel-form" onclick="closeSheet()">Cancel</button>
-        <button class="btn-submit" id="btn-submit" onclick="submitForm()">
-          Add Appliance
-        </button>
+      <div class="card">
+        <div class="section-title">About</div>
+        <div class="about-text">EcoSaver Pro v1.0.0<br>PWA • localStorage • Vanilla JS<br>Optimized for Philippine households (ANECO)<br>Data stored locally on your device.</div>
       </div>
     </div>
   </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="nav-tab active" data-view="home">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Home</div>
+      <div class="nav-dot"></div>
+    </div>
+    <div class="nav-tab" data-view="devices">
+      <div class="nav-icon">📱</div>
+      <div class="nav-label">Devices</div>
+      <div class="nav-dot"></div>
+    </div>
+    <div class="nav-tab" data-view="tips">
+      <div class="nav-icon">💡</div>
+      <div class="nav-label">Tips</div>
+      <div class="nav-dot"></div>
+    </div>
+    <div class="nav-tab" data-view="grade">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">Grade</div>
+      <div class="nav-dot"></div>
+    </div>
+    <div class="nav-tab" data-view="settings">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">Settings</div>
+      <div class="nav-dot"></div>
+    </div>
+  </nav>
 </div>
 
+<!-- FAB -->
+<button class="fab" id="fab">+</button>
+
+<!-- SHEET -->
+<div class="sheet-overlay" id="sheet-overlay"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title" id="sheet-title">Add Appliance</div>
+  <div class="form-group">
+    <label class="form-label">Appliance Name</label>
+    <input type="text" class="form-input" id="f-name" maxlength="80" placeholder="e.g. Living Room AC">
+    <div class="form-error" id="e-name"></div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Watts (W)</label>
+    <input type="number" class="form-input" id="f-watts" min="1" step="1" placeholder="e.g. 1500">
+    <div class="form-error" id="e-watts"></div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Quantity</label>
+    <input type="number" class="form-input" id="f-qty" min="1" step="1" value="1" placeholder="1">
+    <div class="form-error" id="e-qty"></div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Usage Time</label>
+    <div class="seg-switch">
+      <button class="seg-btn active" id="seg-hr" data-unit="hr">Hours per day</button>
+      <button class="seg-btn" id="seg-min" data-unit="min">Minutes per day</button>
+    </div>
+    <input type="number" class="form-input" id="f-time" min="0" step="1" placeholder="e.g. 8">
+    <div class="form-error" id="e-time"></div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Frequency</label>
+    <select class="form-select" id="f-freq">
+      <option value="daily">Daily</option>
+      <option value="3x">3× per Week</option>
+      <option value="weekends">Weekends Only</option>
+      <option value="1x">1× per Week</option>
+    </select>
+  </div>
+  <div class="sheet-actions">
+    <button class="sheet-btn sheet-btn-cancel" id="sheet-cancel">Cancel</button>
+    <button class="sheet-btn sheet-btn-save" id="sheet-save">Save</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-/* ══════════════════════════════════════════
-   CONSTANTS & STATE
-══════════════════════════════════════════ */
-const FREQ = { daily:1, '3x':3/7, weekends:2/7, '1x':1/7 };
-const FREQ_LBL = { daily:'Daily', '3x':'3×/wk', weekends:'Weekends', '1x':'1×/wk' };
-const ICONS = ['💡','❄️','📺','🖥️','🫧','🔌','🌊','🔥','⚡','🍽️'];
-const LS = { APP:'esp_appliances', RATE:'esp_rate', BUDGET:'esp_budget' };
+'use strict';
 
-let appliances = [];
-let rate = 12, budget = 1000, editingId = null;
-let tipsHash = '', tipsFetching = false;
+// ---- STATE ----
+const KEYS = { appliances: 'esp_appliances', rate: 'esp_rate', budget: 'esp_budget' };
+let state = { appliances: [], rate: 12, budget: 1000 };
+let editId = null;
+let currentUnit = 'hr';
+let tipsLoading = false;
+let cachedTips = null;
 
-/* ══════════════════════════════════════════
-   BOOT
-══════════════════════════════════════════ */
-(function init() {
-  try { appliances = JSON.parse(localStorage.getItem(LS.APP)) || []; } catch { appliances = []; }
-  rate   = parseFloat(localStorage.getItem(LS.RATE))   || 12;
-  budget = parseFloat(localStorage.getItem(LS.BUDGET)) || 1000;
-
-  document.getElementById('s-rate').value   = rate;
-  document.getElementById('s-budget').value = budget;
-
-  document.getElementById('s-rate').addEventListener('input', e => {
-    rate = parseFloat(e.target.value) || 0; save(); render();
-  });
-  document.getElementById('s-budget').addEventListener('input', e => {
-    budget = parseFloat(e.target.value) || 0; save(); render();
-  });
-
-  render();
-  tickClock();
-  setInterval(tickClock, 1000);
-  fetchTips(true);
-})();
-
-/* Service worker */
-/* FIX 2: Removed leading slash from service worker registration (Line 746) */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
+// ---- HELPERS ----
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+function fmt(n, dec=2) { return n.toFixed(dec).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function fmtCurrency(n) { return '₱' + fmt(n); }
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+function vibrate(ms=40) { try { navigator.vibrate && navigator.vibrate(ms); } catch(e){} }
+function showToast(msg, dur=2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
 }
 
-/* ══════════════════════════════════════════
-   CALCULATIONS
-══════════════════════════════════════════ */
-function kwhMonth(a) { return (a.watts * a.qty * a.hours * (FREQ[a.freq]||1) * 30) / 1000; }
-function costMonth(a) { return kwhMonth(a) * rate; }
-function calcTotals() {
-  let kwhT=0, costT=0, vamp=null, vampKwh=0;
-  appliances.forEach(a => {
-    const k=kwhMonth(a), c=costMonth(a);
-    kwhT+=k; costT+=c;
-    if(k>vampKwh){ vampKwh=k; vamp=a; }
-  });
-  return { kwhT, costT, vamp, vampKwh };
-}
-function appIcon(name) {
-  const n=name.toLowerCase();
-  if(n.includes('air')||n.includes('aircon')||n.includes('ac')) return '❄️';
-  if(n.includes('tv')||n.includes('tele')) return '📺';
-  if(n.includes('ref')||n.includes('fridge')) return '🧊';
-  if(n.includes('wash')) return '🫧';
-  if(n.includes('heat')||n.includes('water')) return '🔥';
-  if(n.includes('light')||n.includes('bulb')||n.includes('lamp')) return '💡';
-  if(n.includes('computer')||n.includes('pc')||n.includes('laptop')) return '🖥️';
-  if(n.includes('pump')||n.includes('motor')) return '⚙️';
-  if(n.includes('fan')) return '🌀';
-  if(n.includes('oven')||n.includes('microwave')||n.includes('cook')) return '🍽️';
+// ---- EMOJI DETECTION ----
+function getEmoji(name) {
+  const n = name.toLowerCase();
+  if (/air\s?con|aircon|ac\b|split|window unit/.test(n)) return '❄️';
+  if (/tv|television|monitor/.test(n)) return '📺';
+  if (/ref|refrigerator|fridge/.test(n)) return '🧊';
+  if (/washing|washer|laundry/.test(n)) return '🫧';
+  if (/fan|electric fan/.test(n)) return '🌀';
+  if (/light|lamp|bulb|led/.test(n)) return '💡';
+  if (/computer|pc|desktop|laptop/.test(n)) return '💻';
+  if (/phone|charger|mobile/.test(n)) return '📱';
+  if (/water heater|heater|geyser/.test(n)) return '🔥';
+  if (/microwave|oven|airfryer/.test(n)) return '🍳';
+  if (/rice cooker|cooker/.test(n)) return '🍚';
+  if (/iron|clothes iron/.test(n)) return '👔';
+  if (/dispenser|water pump|pump/.test(n)) return '💧';
+  if (/router|wifi|modem/.test(n)) return '📡';
   return '🔌';
 }
 
-/* ══════════════════════════════════════════
-   RENDER
-══════════════════════════════════════════ */
-function render() {
-  const { kwhT, costT, vamp, vampKwh } = calcTotals();
-  const dailyKwh = kwhT / 30;
-  const pct = budget > 0 ? (costT / budget) * 100 : 0;
+// ---- CALCULATIONS ----
+function freqMult(f) {
+  return { daily:1, '3x':3/7, weekends:2/7, '1x':1/7 }[f] || 1;
+}
+function calcKwh(a) {
+  const hrs = a.unit === 'min' ? (a.rawTime/60) : a.rawTime;
+  return (a.watts * a.qty * hrs * freqMult(a.freq) * 30) / 1000;
+}
+function calcCost(kwh, rate) { return kwh * rate; }
 
-  /* hero */
-  document.getElementById('h-bill').textContent = costT.toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
-  const bbar = document.getElementById('bbar');
-  bbar.style.width = Math.min(pct,100)+'%';
-  bbar.className = 'bbar-fill'+(costT>budget?' over':pct>=80?' warn':'');
-  document.getElementById('b-used').textContent = '₱'+costT.toFixed(2);
-  document.getElementById('b-pct').textContent = budget>0 ? pct.toFixed(1)+'%' : '—';
-  if(budget===0) document.getElementById('b-remain').textContent='Set a budget';
-  else if(costT>budget) document.getElementById('b-remain').innerHTML='<span style="color:var(--coral)">₱'+(costT-budget).toFixed(2)+' over</span>';
-  else document.getElementById('b-remain').textContent='₱'+(budget-costT).toFixed(2)+' left';
-  document.getElementById('h-sub').textContent = appliances.length===0 ? 'Add appliances to start tracking' : `${appliances.length} appliance${appliances.length>1?'s':''} tracked`;
-
-  /* quick stats */
-  document.getElementById('q-kwh').textContent  = kwhT.toFixed(1);
-  document.getElementById('q-day').textContent  = dailyKwh.toFixed(1);
-  document.getElementById('q-count').textContent = appliances.length;
-
-  /* vampire */
-  if(vamp) {
-    document.getElementById('vamp-name').textContent   = esc(vamp.name);
-    document.getElementById('vamp-detail').textContent = vampKwh.toFixed(2)+' kWh/mo · ₱'+( vampKwh*rate).toFixed(2)+'/mo';
-  } else {
-    document.getElementById('vamp-name').textContent   = 'No appliances yet';
-    document.getElementById('vamp-detail').textContent = 'Add appliances to find your biggest consumer';
-  }
-
-  /* grade pill in header */
-  const gp = document.getElementById('grade-pill');
-  if(budget===0||appliances.length===0){ gp.textContent='?'; gp.className=''; }
-  else if(pct<=80){ gp.textContent='A'; gp.className='grade-A'; }
-  else if(pct<=100){ gp.textContent='C'; gp.className='grade-C'; }
-  else { gp.textContent='F'; gp.className='grade-F'; }
-
-  /* grade view */
-  renderGrade(pct);
-
-  /* lists */
-  renderHomeList();
-  renderInvList();
-
-  /* alerts */
-  renderAlerts(costT, pct);
-
-  /* grade breakdown */
-  renderBreakdown();
+function getTotals() {
+  const kwh = state.appliances.reduce((s,a) => s + calcKwh(a), 0);
+  const cost = calcCost(kwh, state.rate);
+  return { kwh, cost };
 }
 
-function renderGrade(pct) {
-  const ring = document.getElementById('big-grade');
-  const title = document.getElementById('big-grade-title');
-  const detail = document.getElementById('big-grade-detail');
-  ring.className = 'grade-ring';
-  if(budget===0||appliances.length===0){
-    ring.classList.add('q'); ring.textContent='?';
-    title.textContent='No Budget Set'; detail.textContent='Set a budget in Settings to see your grade.';
-  } else if(pct<=80){
-    ring.textContent='A';
-    title.textContent='Excellent — Grade A ✓'; detail.textContent='You\'re well within your monthly budget. Great energy discipline!';
-  } else if(pct<=100){
-    ring.classList.add('C'); ring.textContent='C';
-    title.textContent='Caution — Grade C ⚠'; detail.textContent='You\'re approaching your budget limit. Consider reducing usage.';
+function calcANECO(kwhMo) {
+  const gen = kwhMo * 5.50;
+  const tx = kwhMo * 0.80;
+  const sysloss = kwhMo * 0.30;
+  const dist = kwhMo * 2.00;
+  const supply = kwhMo * 0.50;
+  const metering = 5.00;
+  const subtotal = gen + tx + sysloss + dist + supply + metering;
+  const vatBase = gen + tx + dist + supply;
+  const vat = vatBase * 0.12;
+  const fitAll = kwhMo * 0.05;
+  const uc = kwhMo * 0.15;
+  const total = subtotal + vat + fitAll + uc;
+  return { gen, tx, sysloss, dist, supply, metering, subtotal, vat, fitAll, uc, total };
+}
+
+// ---- PERSISTENCE ----
+function load() {
+  try {
+    const a = localStorage.getItem(KEYS.appliances);
+    if (a) state.appliances = JSON.parse(a);
+    const r = localStorage.getItem(KEYS.rate);
+    if (r) state.rate = parseFloat(r);
+    const b = localStorage.getItem(KEYS.budget);
+    if (b) state.budget = parseFloat(b);
+  } catch(e) {}
+}
+function save() {
+  localStorage.setItem(KEYS.appliances, JSON.stringify(state.appliances));
+  localStorage.setItem(KEYS.rate, state.rate);
+  localStorage.setItem(KEYS.budget, state.budget);
+}
+
+// ---- CLOCK ----
+function updateClock() {
+  const now = new Date();
+  const ph = new Intl.DateTimeFormat('en-PH', {
+    hour:'numeric', minute:'2-digit', second:'2-digit', hour12:true, timeZone:'Asia/Manila'
+  }).format(now);
+  document.getElementById('clock').textContent = ph + ' PHT';
+}
+
+// ---- GRADE CALC ----
+function calcGrade() {
+  const { cost } = getTotals();
+  const pct = cost / state.budget;
+  if (pct <= 0.80) return 'A';
+  if (pct <= 1.00) return 'C';
+  return 'F';
+}
+
+// ---- RENDER HOME ----
+function renderHome() {
+  const { kwh, cost } = getTotals();
+  const grade = calcGrade();
+  const pct = Math.min((cost / state.budget) * 100, 150);
+
+  // hero
+  document.getElementById('hero-num').textContent = fmt(cost);
+  const prog = document.getElementById('hero-progress');
+  prog.style.width = Math.min(pct, 100) + '%';
+  prog.className = 'progress-fill ' + (pct <= 80 ? 'green' : pct <= 100 ? 'amber' : 'red');
+  document.getElementById('budget-used-lbl').textContent = fmtCurrency(cost) + ' used';
+  const left = state.budget - cost;
+  document.getElementById('budget-left-lbl').textContent = (left >= 0 ? fmtCurrency(left) + ' left' : fmtCurrency(-left) + ' over');
+
+  // stats
+  document.getElementById('stat-kwh-mo').textContent = fmt(kwh, 1);
+  document.getElementById('stat-kwh-day').textContent = fmt(kwh/30, 1);
+  document.getElementById('stat-count').textContent = state.appliances.length;
+
+  // grade pill
+  const pill = document.getElementById('grade-pill');
+  pill.textContent = grade;
+  pill.className = 'grade-pill ' + grade;
+
+  // alerts
+  const alertsArea = document.getElementById('alerts-area');
+  alertsArea.innerHTML = '';
+  const pctRaw = cost / state.budget;
+  if (pctRaw > 1) {
+    alertsArea.innerHTML = `<div class="alert alert-danger">⚠️ You've exceeded your monthly budget by ${fmtCurrency(cost - state.budget)}!</div>`;
+  } else if (pctRaw >= 0.8) {
+    alertsArea.innerHTML = `<div class="alert alert-warn">⚡ Approaching budget limit — ${fmt((1-pctRaw)*100,0)}% remaining.</div>`;
+  }
+
+  // vampire
+  const vampArea = document.getElementById('vampire-area');
+  if (state.appliances.length > 0) {
+    const sorted = [...state.appliances].sort((a,b) => calcKwh(b) - calcKwh(a));
+    const v = sorted[0];
+    const vKwh = calcKwh(v);
+    vampArea.innerHTML = `<div class="vampire-card"><div class="section-title" style="color:#fca5a5">⚡ Energy Vampire</div><div class="vampire-name">${esc(getEmoji(v.name))} ${esc(v.name)}</div><div class="vampire-sub">${fmt(vKwh,2)} kWh/mo · ${fmtCurrency(calcCost(vKwh, state.rate))}/mo</div></div>`;
   } else {
-    ring.classList.add('F'); ring.textContent='F';
-    title.textContent='Over Budget — Grade F ✗'; detail.textContent='You\'ve exceeded your budget. Act now to cut consumption.';
+    vampArea.innerHTML = '';
+  }
+
+  // ANECO
+  const aneco = document.getElementById('aneco-section');
+  if (kwh > 0) {
+    aneco.style.display = 'block';
+    const B = calcANECO(kwh);
+    document.getElementById('aneco-inner').innerHTML = `
+      <div class="aneco-label">ANECO Unbundled Estimate</div>
+      ${row('Generation (₱5.50/kWh)', B.gen)}
+      ${row('Transmission (₱0.80/kWh)', B.tx)}
+      ${row('System Loss (₱0.30/kWh)', B.sysloss)}
+      ${row('Distribution (₱2.00/kWh)', B.dist)}
+      ${row('Supply Charge (₱0.50/kWh)', B.supply)}
+      ${row('Metering Charge (fixed)', B.metering)}
+      <div class="aneco-row subtotal"><span>Subtotal</span><span class="r-val">${fmtCurrency(B.subtotal)}</span></div>
+      ${row('VAT (12%)', B.vat)}
+      ${row('FIT-All (₱0.05/kWh)', B.fitAll)}
+      ${row('Universal Charge (₱0.15/kWh)', B.uc)}
+      <div class="aneco-row total"><span>Total Estimated Bill</span><span class="r-val">${fmtCurrency(B.total)}</span></div>
+    `;
+  } else {
+    aneco.style.display = 'none';
+  }
+
+  // top 5
+  const top5 = document.getElementById('top5-list');
+  if (state.appliances.length === 0) {
+    top5.innerHTML = `<div class="empty-state"><div class="empty-icon">🌱</div><div class="empty-title">No appliances yet</div><div class="empty-sub">Tap + to add your first appliance and start tracking your energy use.</div></div>`;
+  } else {
+    const sorted = [...state.appliances].sort((a,b) => calcCost(calcKwh(b), state.rate) - calcCost(calcKwh(a), state.rate)).slice(0,5);
+    top5.innerHTML = sorted.map(a => {
+      const k = calcKwh(a);
+      const c = calcCost(k, state.rate);
+      return `<div class="appliance-mini"><div class="mini-left"><div class="mini-emoji">${esc(getEmoji(a.name))}</div><div><div class="mini-name">${esc(a.name)}</div><div class="mini-kwh">${fmt(k,2)} kWh/mo</div></div></div><div class="mini-cost">${fmtCurrency(c)}</div></div>`;
+    }).join('');
   }
 }
 
-function renderBreakdown() {
-  const el = document.getElementById('grade-breakdown');
-  if(!appliances.length){ el.innerHTML='<div class="empty-state"><span class="emoji">📋</span><p>Add appliances to see breakdown.</p></div>'; return; }
-  const sorted=[...appliances].sort((a,b)=>costMonth(b)-costMonth(a));
-  el.innerHTML = sorted.map(a=>{
-    const k=kwhMonth(a).toFixed(1), c=costMonth(a).toFixed(2);
-    const pctOf = budget>0 ? ((costMonth(a)/budget)*100).toFixed(0) : '—';
-    return `<div class="leaf-card">
-      <div class="lc-icon">${appIcon(a.name)}</div>
-      <div class="lc-body">
-        <div class="lc-name">${esc(a.name)}</div>
-        <div class="lc-meta">${a.watts}W · ${FREQ_LBL[a.freq]||a.freq} · ${a.hours}h/day</div>
+function row(label, val) {
+  return `<div class="aneco-row"><span>${label}</span><span class="r-val">${fmtCurrency(val)}</span></div>`;
+}
+
+// ---- RENDER DEVICES ----
+function renderDevices() {
+  const list = document.getElementById('devices-list');
+  if (state.appliances.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🔌</div><div class="empty-title">No appliances added</div><div class="empty-sub">Tap the + button to add your first appliance.</div></div>`;
+    return;
+  }
+  list.innerHTML = state.appliances.map(a => {
+    const k = calcKwh(a);
+    const c = calcCost(k, state.rate);
+    const timeStr = a.unit === 'min' ? `${a.rawTime} min/day` : `${a.rawTime} hr/day`;
+    const freqStr = { daily:'Daily', '3x':'3×/week', weekends:'Weekends', '1x':'1×/week' }[a.freq] || a.freq;
+    return `<div class="card device-card">
+      <div class="device-header">
+        <div class="device-emoji">${esc(getEmoji(a.name))}</div>
+        <div>
+          <div class="device-name">${esc(a.name)}</div>
+          <div class="device-spec">${esc(a.watts)}W × ${esc(String(a.qty))} · ${esc(timeStr)} · ${esc(freqStr)}</div>
+        </div>
       </div>
-      <div class="lc-right">
-        <div class="lc-kwh">${k} kWh</div>
-        <div class="lc-cost">₱${c} · ${pctOf}% of budget</div>
+      <div class="device-stats">
+        <div class="device-stat"><div class="val">${fmt(k,2)}</div><div class="lbl">kWh/mo</div></div>
+        <div class="device-stat"><div class="val">${fmtCurrency(c)}</div><div class="lbl">Cost/mo</div></div>
+      </div>
+      <div class="device-actions">
+        <button class="btn-sm btn-edit" onclick="openEditSheet('${esc(a.id)}')">✏️ Edit</button>
+        <button class="btn-sm btn-delete" onclick="deleteAppliance('${esc(a.id)}')">🗑️ Delete</button>
       </div>
     </div>`;
   }).join('');
 }
 
-function renderHomeList() {
-  const el = document.getElementById('home-list');
-  const cnt = document.getElementById('home-count');
-  cnt.textContent = appliances.length+' item'+(appliances.length!==1?'s':'');
-  if(!appliances.length){
-    el.innerHTML='<div class="empty-state"><span class="emoji">🌱</span><p>No appliances added yet.<br>Tap <strong>+</strong> to add your first one!</p></div>';
+// ---- RENDER GRADE ----
+function renderGrade() {
+  const gc = document.getElementById('grade-content');
+  if (state.budget <= 0) {
+    gc.innerHTML = `<div class="empty-state"><div class="empty-icon">⚙️</div><div class="empty-title">No budget set</div><div class="empty-sub">Set a monthly budget in Settings to see your efficiency grade.</div></div>`;
     return;
   }
-  const sorted=[...appliances].sort((a,b)=>costMonth(b)-costMonth(a));
-  el.innerHTML = sorted.slice(0,5).map(a=>leafCard(a)).join('');
-  if(appliances.length>5){
-    el.innerHTML += `<div style="text-align:center;padding:10px;font-size:.82rem;color:var(--text-dim)">+${appliances.length-5} more — see Devices tab</div>`;
-  }
-}
-
-function renderInvList() {
-  const el = document.getElementById('inv-list');
-  const cnt = document.getElementById('inv-count');
-  cnt.textContent = appliances.length+' appliance'+(appliances.length!==1?'s':'');
-  if(!appliances.length){
-    el.innerHTML='<div class="empty-state"><span class="emoji">🌱</span><p>No appliances yet.<br>Tap <strong>+</strong> to start tracking!</p></div>';
-    return;
-  }
-  el.innerHTML = appliances.map(a=>leafCard(a, true)).join('');
-}
-
-function leafCard(a, showActions=false) {
-  const k=kwhMonth(a).toFixed(1), c=costMonth(a).toFixed(2);
-  const editing = a.id===editingId;
-  const actions = showActions ? `<div class="lc-actions">
-    <button class="lc-btn lc-btn-edit" onclick="startEdit('${esc(a.id)}')">✏️ Edit</button>
-    <button class="lc-btn lc-btn-del" onclick="deleteAppliance('${esc(a.id)}')">🗑 Delete</button>
-  </div>` : '';
-  return `<div class="leaf-card${editing?' editing':''}">
-    <div class="lc-icon">${appIcon(a.name)}</div>
-    <div class="lc-body">
-      <div class="lc-name">${esc(a.name)}</div>
-      <div class="lc-meta">${a.watts}W × ${a.qty} · ${FREQ_LBL[a.freq]||a.freq} · ${a.hours}h/day</div>
-      ${actions}
+  const { kwh, cost } = getTotals();
+  const g = calcGrade();
+  const pct = (cost / state.budget) * 100;
+  const msgs = {
+    A: 'Excellent! Your household is energy-efficient. Keep up the great habits!',
+    C: 'Approaching your budget limit. Consider reducing usage on high-consumption appliances.',
+    F: 'Over budget! Review your high-usage appliances and cut back where possible.'
+  };
+  const sorted = [...state.appliances].sort((a,b) => calcCost(calcKwh(b), state.rate) - calcCost(calcKwh(a), state.rate));
+  gc.innerHTML = `
+    <div class="grade-big">
+      <div class="grade-letter ${g}">${g}</div>
+      <div class="grade-msg">${msgs[g]}<br><br>Using <b>${fmt(pct,1)}%</b> of your <b>${fmtCurrency(state.budget)}</b> budget.</div>
     </div>
-    <div class="lc-right">
-      <div class="lc-kwh">${k} kWh</div>
-      <div class="lc-cost">₱${c}/mo</div>
-    </div>
-  </div>`;
+    ${sorted.length > 0 ? `<div class="card">
+      <div class="section-title">Appliance Breakdown</div>
+      ${sorted.map(a => {
+        const k = calcKwh(a);
+        const c = calcCost(k, state.rate);
+        const ap = state.budget > 0 ? (c/state.budget*100) : 0;
+        return `<div class="grade-appliance-row">
+          <div class="ga-left">
+            <div class="mini-emoji">${esc(getEmoji(a.name))}</div>
+            <div><div class="mini-name">${esc(a.name)}</div><div class="mini-kwh">${fmt(k,2)} kWh/mo</div></div>
+          </div>
+          <div class="ga-right">
+            <div class="mini-cost">${fmtCurrency(c)}</div>
+            <div class="ga-pct">${fmt(ap,1)}% of budget</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>` : ''}
+  `;
 }
 
-function renderAlerts(costT, pct) {
-  const el = document.getElementById('alerts');
-  const msgs = [];
-  if(budget>0){
-    if(costT>budget) msgs.push({cls:'alert-danger',msg:'🚨 Over budget by ₱'+(costT-budget).toFixed(2)+'! Reduce appliance usage.'});
-    else if(pct>=80) msgs.push({cls:'alert-warn',msg:'⚠️ '+pct.toFixed(1)+'% of budget used. Monitor your consumption.'});
-  }
-  const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Manila'}));
-  if(now.getHours()>=18&&now.getHours()<21) msgs.push({cls:'alert-info',msg:'⚡ Peak hours (6–9 PM PHT) — defer heavy appliance use to save.'});
-  el.innerHTML=msgs.map(m=>`<div class="alert ${m.cls}">${m.msg}</div>`).join('');
+// ---- TIPS ----
+function buildApplianceList() {
+  return state.appliances.map(a => {
+    const k = calcKwh(a);
+    const timeStr = a.unit === 'min' ? `${a.rawTime} min/day` : `${a.rawTime} hr/day`;
+    return `- ${a.name}: ${a.watts}W × ${a.qty}, ${timeStr}, ${a.freq}, ${fmt(k,2)} kWh/mo`;
+  }).join('\n');
 }
 
-/* ══════════════════════════════════════════
-   NAVIGATION
-══════════════════════════════════════════ */
-function switchView(name, btn) {
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('view-'+name).classList.add('active');
-  btn.classList.add('active');
-  document.getElementById('scroll-area').scrollTop=0;
-}
-
-/* ══════════════════════════════════════════
-   FORM SHEET
-══════════════════════════════════════════ */
-function openSheet() {
-  document.getElementById('form-sheet').classList.add('open');
-  document.getElementById('fab').classList.add('active');
-  setTimeout(()=>document.getElementById('f-name').focus(), 350);
-}
-function closeSheet() {
-  if(!editingId){ clearForm(); }
-  document.getElementById('form-sheet').classList.remove('open');
-  document.getElementById('fab').classList.remove('active');
-  if(editingId){ cancelEdit(); }
-}
-
-function submitForm() {
-  const name  = document.getElementById('f-name').value.trim();
-  const watts = parseFloat(document.getElementById('f-watts').value);
-  const qty   = parseInt(document.getElementById('f-qty').value);
-  const hours = parseFloat(document.getElementById('f-hours').value);
-  const freq  = document.getElementById('f-freq').value;
-
-  if(!name)         return vibrate(), alert('Please enter an appliance name.');
-  if(!watts||watts<=0) return vibrate(), alert('Watts must be a positive number.');
-  if(!qty||qty<1)   return vibrate(), alert('Quantity must be at least 1.');
-  if(isNaN(hours)||hours<0) return vibrate(), alert('Hours must be 0 or more.');
-  if(hours>24)      return vibrate(), alert('Hours cannot exceed 24.');
-  if(hours===0&&!confirm('Zero hours — no energy consumed. Continue?')) return;
-
-  if(editingId) {
-    const idx=appliances.findIndex(a=>a.id===editingId);
-    if(idx>-1) appliances[idx]={...appliances[idx],name,watts,qty,hours,freq};
-    editingId=null;
-  } else {
-    appliances.push({id:uid(),name,watts,qty,hours,freq});
-  }
-
-  clearForm();
-  document.getElementById('form-sheet').classList.remove('open');
-  document.getElementById('fab').classList.remove('active');
-  document.getElementById('sheet-title').textContent='Add Appliance';
-  document.getElementById('btn-submit').textContent='Add Appliance';
-  save(); render(); fetchTips();
-}
-
-function startEdit(id) {
-  const a=appliances.find(x=>x.id===id);
-  if(!a) return;
-  editingId=id;
-  document.getElementById('f-name').value  = a.name;
-  document.getElementById('f-watts').value = a.watts;
-  document.getElementById('f-qty').value   = a.qty;
-  document.getElementById('f-hours').value = a.hours;
-  document.getElementById('f-freq').value  = a.freq;
-  document.getElementById('sheet-title').textContent='Edit Appliance';
-  document.getElementById('btn-submit').textContent='💾 Save Changes';
-  openSheet();
-  render();
-}
-function cancelEdit() {
-  editingId=null; clearForm();
-  document.getElementById('sheet-title').textContent='Add Appliance';
-  document.getElementById('btn-submit').textContent='Add Appliance';
-  render();
-}
-function clearForm() {
-  ['f-name','f-watts','f-hours'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('f-qty').value='1';
-  document.getElementById('f-freq').value='daily';
-}
-function deleteAppliance(id) {
-  if(!confirm('Delete this appliance?')) return;
-  appliances=appliances.filter(a=>a.id!==id);
-  if(editingId===id) cancelEdit();
-  save(); render(); fetchTips();
-}
-function clearAll() {
-  if(!confirm('Remove ALL appliances? This cannot be undone.')) return;
-  appliances=[]; editingId=null;
-  closeSheet(); save(); render(); fetchTips(true);
-}
-function resetDefaults() {
-  rate=12; budget=1000;
-  document.getElementById('s-rate').value=rate;
-  document.getElementById('s-budget').value=budget;
-  save(); render();
-}
-
-/* ══════════════════════════════════════════
-   CLOCK
-══════════════════════════════════════════ */
-function tickClock() {
-  const pht=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Manila'}));
-  const h=pht.getHours(),m=String(pht.getMinutes()).padStart(2,'0'),s=String(pht.getSeconds()).padStart(2,'0');
-  const ampm=h>=12?'PM':'AM', h12=h%12||12;
-  document.getElementById('clock').textContent=`${h12}:${m}:${s} ${ampm} PHT`;
-  const peak=document.getElementById('peak-pill');
-  peak.style.display=(h>=18&&h<21)?'flex':'none';
-}
-
-/* ══════════════════════════════════════════
-   SAVING TIPS (AI)
-══════════════════════════════════════════ */
-function buildContext() {
-  const {kwhT,costT,vamp,vampKwh}=calcTotals();
-  const pct=budget>0?((costT/budget)*100).toFixed(1):null;
-  const sorted=[...appliances].sort((a,b)=>kwhMonth(b)-kwhMonth(a))
-    .map(a=>({name:a.name,watts:a.watts,qty:a.qty,hours:a.hours,freq:a.freq,kwh:+kwhMonth(a).toFixed(2),cost:+costMonth(a).toFixed(2)}));
-  let ctx=`Rate: ₱${rate}/kWh | Budget: ₱${budget||'not set'} | Bill: ₱${costT.toFixed(2)} | Used: ${pct||'N/A'}% | Total: ${kwhT.toFixed(2)} kWh/mo\n`;
-  if(vamp) ctx+=`Biggest consumer: ${vamp.name} (${vampKwh.toFixed(2)} kWh/mo)\n`;
-  ctx+=`Appliances:\n`+sorted.map((a,i)=>`${i+1}. ${a.name}: ${a.watts}W×${a.qty}, ${a.hours}h/day, ${a.freq} → ${a.kwh} kWh/mo, ₱${a.cost}/mo`).join('\n');
-  return ctx;
-}
-
-async function fetchTips(force=false) {
-  if(tipsFetching) return;
-  const hash=JSON.stringify({appliances,rate,budget});
-  if(!force&&hash===tipsHash) return;
-  tipsHash=hash;
-
-  const el=document.getElementById('tips-container');
-
-  if(!appliances.length) {
-    el.innerHTML='<div class="empty-state"><span class="emoji">💡</span><p>Add appliances to get personalized saving tips!</p></div>';
+async function fetchTips() {
+  if (state.appliances.length === 0) {
+    renderTips(null);
     return;
   }
+  if (tipsLoading) return;
+  tipsLoading = true;
+  document.getElementById('tips-content').innerHTML = `<div class="loading-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  document.getElementById('tips-refresh-btn').style.display = 'none';
 
-  tipsFetching=true;
-  const btn=document.getElementById('btn-refresh');
-  const ico=document.getElementById('ref-icon');
-  btn.disabled=true; ico.className='spin'; ico.textContent='⏳';
-  el.innerHTML='<div class="tips-loading"><span>Generating your tips…</span><div class="dots"><span></span><span></span><span></span></div></div>';
-
-  const prompt=`You are an energy-saving expert for Philippine households. Analyze this data and give exactly 6 highly specific, actionable saving tips referencing the user's actual appliances and real numbers.
-
-${buildContext()}
-
-Return ONLY a valid JSON array with 6 objects. Each object must have:
-- "icon": single emoji
-- "title": short punchy title (max 6 words)
-- "advice": specific tip referencing actual appliance names and real numbers (2–3 sentences)
-- "saving": estimated monthly saving like "~₱120/mo" or "~5 kWh/mo" (realistic, not inflated)
-
-Focus: if over budget → urgent cuts for top consumers. If near limit → moderate reductions. If healthy → efficiency tips. Mix scheduling, settings, habits, maintenance, upgrades. Reference peak hours (6–9 PM PHT). Return ONLY the JSON array.`;
+  const appList = buildApplianceList();
+  const prompt = `You are an energy-saving advisor for Philippine households. The user has these appliances:\n${appList}\n\nGenerate exactly 6 energy-saving tips. IMPORTANT RULES:\n1. You may ONLY give tips that specifically mention at least one of the user's actual appliances from the list above.\n2. Do not suggest any appliance, device, or action that refers to an appliance not in the list.\n3. Make every tip directly actionable for the user's exact inventory.\n4. Do NOT suggest shifting usage to off-peak hours or time-of-day scheduling.\n5. Return ONLY a JSON array of exactly 6 objects with this structure: {"emoji":"<emoji>","title":"<short title>","body":"<2-3 sentences of advice mentioning real appliance names and numbers>","saving":"<e.g. ~₱120/mo>"}\n6. No markdown, no preamble, just the JSON array.`;
 
   try {
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
     });
-    const data=await res.json();
-    const raw=(data.content||[]).map(b=>b.text||'').join('').trim();
-    const clean=raw.replace(/^```json\s*/i,'').replace(/```\s*$/,'').trim();
-    const tips=JSON.parse(clean);
-    if(!Array.isArray(tips)||!tips.length) throw new Error('bad');
-    el.innerHTML=tips.map(t=>`
-      <div class="tip-card">
-        <div class="tip-ico">${esc(t.icon||'💡')}</div>
-        <div class="tip-body">
-          <div class="tip-title">${esc(t.title||'')}</div>
-          <div class="tip-text">${esc(t.advice||'')}</div>
-          ${t.saving?`<span class="tip-save">${esc(t.saving)}</span>`:''}
-        </div>
-      </div>`).join('');
-  } catch {
-    el.innerHTML = buildFallbackTips();
-  } finally {
-    tipsFetching=false;
-    btn.disabled=false; ico.className=''; ico.textContent='🔄';
+    const data = await resp.json();
+    const text = data.content?.map(b => b.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const tips = JSON.parse(clean);
+    if (Array.isArray(tips) && tips.length > 0) {
+      cachedTips = tips;
+      renderTips(tips);
+      tipsLoading = false;
+      return;
+    }
+  } catch(e) {}
+
+  // Fallback
+  const fallback = generateFallbackTips();
+  cachedTips = fallback;
+  renderTips(fallback);
+  tipsLoading = false;
+}
+
+function generateFallbackTips() {
+  const sorted = [...state.appliances].sort((a,b) => calcKwh(b) - calcKwh(a));
+  const tips = [];
+  const used = new Set();
+  for (const a of sorted) {
+    if (tips.length >= 6) break;
+    const k = calcKwh(a);
+    const saving = calcCost(k * 0.15, state.rate);
+    const timeStr = a.unit === 'min' ? `${Math.max(1, a.rawTime - 30)} min` : `${Math.max(0.5, a.rawTime - 0.5).toFixed(1)} hr`;
+    tips.push({
+      emoji: getEmoji(a.name),
+      title: `Reduce ${a.name} runtime`,
+      body: `Your ${a.name} (${a.watts}W × ${a.qty}) is a significant consumer at ${fmt(k,2)} kWh/mo. Try reducing daily usage by 30 minutes. Even small reductions add up over a month.`,
+      saving: `~${fmtCurrency(saving)}/mo`
+    });
+    used.add(a.id);
+  }
+  // Fill remaining
+  const fillers = [
+    { emoji:'💡', title:'Unplug idle appliances', body:`Appliances on standby still draw power. Unplug your ${state.appliances[0]?.name || 'devices'} and other electronics when not in use to eliminate phantom load.`, saving:'~₱50/mo' },
+    { emoji:'🌡️', title:'Optimal temperature settings', body:`If your appliance has a temperature control (e.g., ${state.appliances[0]?.name || 'cooling units'}), set it to the most energy-efficient level. Each degree counts toward savings.`, saving:'~₱80/mo' },
+  ];
+  for (const f of fillers) {
+    if (tips.length >= 6) break;
+    tips.push(f);
+  }
+  return tips.slice(0, 6);
+}
+
+function renderTips(tips) {
+  tipsLoading = false;
+  const content = document.getElementById('tips-content');
+  const refreshBtn = document.getElementById('tips-refresh-btn');
+  if (state.appliances.length === 0) {
+    refreshBtn.style.display = 'none';
+    content.innerHTML = `<div class="empty-state"><div class="empty-icon">💡</div><div class="empty-title">No appliances added</div><div class="empty-sub">Add appliances to get personalized energy saving tips.</div></div>`;
+    return;
+  }
+  refreshBtn.style.display = 'flex';
+  if (!tips) {
+    content.innerHTML = `<div class="empty-state"><div class="empty-icon">💡</div><div class="empty-title">No tips yet</div><div class="empty-sub">Tap Refresh Tips to generate personalized savings advice.</div></div>`;
+    return;
+  }
+  content.innerHTML = tips.map(t => `<div class="card tip-card">
+    <div class="tip-emoji">${esc(t.emoji)}</div>
+    <div class="tip-title">${esc(t.title)}</div>
+    <div class="tip-body">${esc(t.body)}</div>
+    <span class="tip-saving">${esc(t.saving)}</span>
+  </div>`).join('');
+}
+
+// ---- SETTINGS ----
+function renderSettings() {
+  document.getElementById('s-rate').value = state.rate;
+  document.getElementById('s-budget').value = state.budget;
+}
+
+function initSettings() {
+  document.getElementById('s-save').addEventListener('click', () => {
+    const r = parseFloat(document.getElementById('s-rate').value);
+    const b = parseFloat(document.getElementById('s-budget').value);
+    if (isNaN(r) || r <= 0) { showToast('Invalid electricity rate'); return; }
+    if (isNaN(b) || b <= 0) { showToast('Invalid budget'); return; }
+    state.rate = r; state.budget = b;
+    save(); renderAll(); showToast('Settings saved ✅');
+  });
+  document.getElementById('s-reset').addEventListener('click', () => {
+    state.rate = 12; state.budget = 1000;
+    renderSettings(); save(); renderAll(); showToast('Reset to defaults');
+  });
+  document.getElementById('s-export').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify({ appliances: state.appliances, rate: state.rate, budget: state.budget }, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ecosaver-pro-backup.json';
+    a.click();
+  });
+  document.getElementById('s-import-btn').addEventListener('click', () => {
+    document.getElementById('s-import-file').click();
+  });
+  document.getElementById('s-import-file').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const d = JSON.parse(ev.target.result);
+        if (!Array.isArray(d.appliances)) throw new Error('Invalid format');
+        state.appliances = d.appliances;
+        if (d.rate) state.rate = parseFloat(d.rate);
+        if (d.budget) state.budget = parseFloat(d.budget);
+        save(); renderAll(); renderSettings(); showToast('Import successful ✅');
+      } catch { showToast('Import failed: invalid JSON'); }
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+  document.getElementById('s-clear').addEventListener('click', () => {
+    if (confirm('Delete ALL appliances? This cannot be undone.')) {
+      state.appliances = [];
+      cachedTips = null;
+      save(); renderAll(); showToast('All appliances cleared');
+    }
+  });
+}
+
+// ---- SHEET ----
+function openSheet() {
+  document.getElementById('sheet-overlay').classList.add('open');
+  document.getElementById('sheet').classList.add('open');
+  document.getElementById('f-name').focus();
+}
+function closeSheet() {
+  document.getElementById('sheet-overlay').classList.remove('open');
+  document.getElementById('sheet').classList.remove('open');
+  resetSheet();
+  editId = null;
+}
+function resetSheet() {
+  document.getElementById('sheet-title').textContent = 'Add Appliance';
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-watts').value = '';
+  document.getElementById('f-qty').value = '1';
+  document.getElementById('f-time').value = '';
+  document.getElementById('f-freq').value = 'daily';
+  ['e-name','e-watts','e-qty','e-time'].forEach(id => document.getElementById(id).textContent = '');
+  ['f-name','f-watts','f-qty','f-time'].forEach(id => document.getElementById(id).classList.remove('error'));
+  setUnit('hr');
+}
+
+function setUnit(unit) {
+  currentUnit = unit;
+  document.getElementById('seg-hr').classList.toggle('active', unit === 'hr');
+  document.getElementById('seg-min').classList.toggle('active', unit === 'min');
+  const inp = document.getElementById('f-time');
+  if (unit === 'hr') {
+    inp.max = 24; inp.step = 0.1; inp.placeholder = 'e.g. 8';
+  } else {
+    inp.max = 1440; inp.step = 1; inp.placeholder = 'e.g. 120';
   }
 }
 
-function buildFallbackTips() {
-  const {kwhT,costT,vamp,vampKwh}=calcTotals();
-  const pct=budget>0?(costT/budget)*100:0;
-  const sorted=[...appliances].sort((a,b)=>kwhMonth(b)-kwhMonth(a));
-  const pool=[];
-  if(vamp) pool.push({icon:'⚡',title:`Cut ${vamp.name} Usage`,advice:`Your ${vamp.name} consumes ${vampKwh.toFixed(1)} kWh/month. Reducing its daily run time by 1 hour could meaningfully lower your bill.`,saving:`~₱${(vamp.watts*vamp.qty*1*(FREQ[vamp.freq]||1)*30/1000*rate).toFixed(0)}/mo`});
-  sorted.slice(0,2).forEach(a=>{
-    if(a.freq==='daily'&&a.hours>=4) pool.push({icon:'🕕',title:'Shift to Off-Peak',advice:`Run your ${a.name} before 6 PM or after 9 PM PHT to avoid peak-hour demand charges.`,saving:'~10–15% on peak loads'});
-    if(a.watts>800) pool.push({icon:'🌡️',title:`Optimize ${a.name}`,advice:`Your ${a.name} (${a.watts}W) can be set to a more efficient mode or temperature. Even a 10% reduction compounds over ${a.hours} daily hours.`,saving:`~₱${(a.watts*0.1*a.qty*a.hours*(FREQ[a.freq]||1)*30/1000*rate).toFixed(0)}/mo`});
+function openEditSheet(id) {
+  const a = state.appliances.find(x => x.id === id);
+  if (!a) return;
+  editId = id;
+  document.getElementById('sheet-title').textContent = 'Edit Appliance';
+  document.getElementById('f-name').value = a.name;
+  document.getElementById('f-watts').value = a.watts;
+  document.getElementById('f-qty').value = a.qty;
+  document.getElementById('f-freq').value = a.freq;
+  setUnit(a.unit || 'hr');
+  document.getElementById('f-time').value = a.rawTime;
+  openSheet();
+}
+
+function validateSheet() {
+  let valid = true;
+  const name = document.getElementById('f-name').value.trim();
+  const watts = parseFloat(document.getElementById('f-watts').value);
+  const qty = parseInt(document.getElementById('f-qty').value);
+  const time = parseFloat(document.getElementById('f-time').value);
+  const max = currentUnit === 'hr' ? 24 : 1440;
+
+  if (!name) { setErr('f-name','e-name','Name is required'); valid = false; }
+  else clearErr('f-name','e-name');
+
+  if (isNaN(watts) || watts <= 0) { setErr('f-watts','e-watts','Enter a valid wattage (>0)'); valid = false; }
+  else clearErr('f-watts','e-watts');
+
+  if (isNaN(qty) || qty < 1) { setErr('f-qty','e-qty','Quantity must be ≥ 1'); valid = false; }
+  else clearErr('f-qty','e-qty');
+
+  if (isNaN(time) || time < 0 || time > max) { setErr('f-time','e-time',`Usage time must be 0–${max}`); valid = false; }
+  else clearErr('f-time','e-time');
+
+  return valid;
+}
+function setErr(inputId, errId, msg) {
+  document.getElementById(inputId).classList.add('error');
+  document.getElementById(errId).textContent = msg;
+  vibrate(60);
+}
+function clearErr(inputId, errId) {
+  document.getElementById(inputId).classList.remove('error');
+  document.getElementById(errId).textContent = '';
+}
+
+function saveAppliance() {
+  if (!validateSheet()) return;
+  const name = document.getElementById('f-name').value.trim();
+  const watts = parseFloat(document.getElementById('f-watts').value);
+  const qty = parseInt(document.getElementById('f-qty').value);
+  const rawTime = parseFloat(document.getElementById('f-time').value) || 0;
+  const freq = document.getElementById('f-freq').value;
+  const unit = currentUnit;
+  const hours = unit === 'min' ? rawTime/60 : rawTime;
+
+  if (rawTime === 0) {
+    if (!confirm('Usage time is 0. This appliance won\'t contribute to calculations. Continue?')) return;
+  }
+
+  if (editId) {
+    const idx = state.appliances.findIndex(x => x.id === editId);
+    if (idx !== -1) state.appliances[idx] = { ...state.appliances[idx], name, watts, qty, rawTime, unit, freq, hours };
+  } else {
+    state.appliances.push({ id: uid(), name, watts, qty, rawTime, unit, freq, hours });
+  }
+  save();
+  cachedTips = null;
+  renderAll();
+  closeSheet();
+  showToast(editId ? 'Appliance updated ✅' : 'Appliance added ✅');
+  if (currentView === 'tips') fetchTips();
+}
+
+function deleteAppliance(id) {
+  if (!confirm('Delete this appliance?')) return;
+  state.appliances = state.appliances.filter(a => a.id !== id);
+  save(); cachedTips = null; renderAll(); showToast('Deleted');
+}
+
+// ---- NAV ----
+let currentView = 'home';
+function switchView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+  currentView = view;
+  if (view === 'tips' && !cachedTips && state.appliances.length > 0) fetchTips();
+  if (view === 'tips' && state.appliances.length === 0) renderTips(null);
+  if (view === 'grade') renderGrade();
+}
+
+// ---- ANECO TOGGLE ----
+function initAneco() {
+  const btn = document.getElementById('aneco-toggle');
+  const body = document.getElementById('aneco-body');
+  btn.addEventListener('click', () => {
+    const open = body.classList.toggle('open');
+    btn.classList.toggle('open', open);
   });
-  pool.push({icon:'🔌',title:'Unplug Standby Devices',advice:'Appliances on standby silently consume 5–10% of your electricity. Unplug unused chargers, TVs, and gadgets or use a smart power strip.',saving:'~₱50–150/mo'});
-  pool.push({icon:'💡',title:'Switch to LED Lighting',advice:'LEDs use up to 80% less energy than incandescent bulbs and last significantly longer. Replace any remaining old bulbs for instant savings.',saving:'~₱80–200/mo'});
-  pool.push({icon:'🧊',title:'Clean Filters & Coils',advice:'Dirty aircon filters and refrigerator coils force appliances to work harder. Clean them every 2–3 months for peak efficiency.',saving:'~5–10% energy reduction'});
-  if(pct>100) pool.push({icon:'🚨',title:'Emergency: Reduce Now',advice:`You're ₱${(costT-budget).toFixed(0)} over budget. Temporarily cut your highest-use appliances' daily hours until you're back on track.`,saving:`₱${(costT-budget).toFixed(0)} overrun`});
-  return pool.slice(0,6).map(t=>`
-    <div class="tip-card">
-      <div class="tip-ico">${esc(t.icon)}</div>
-      <div class="tip-body">
-        <div class="tip-title">${esc(t.title)}</div>
-        <div class="tip-text">${esc(t.advice)}</div>
-        ${t.saving?`<span class="tip-save">${esc(t.saving)}</span>`:''}
-      </div>
-    </div>`).join('');
 }
 
-/* ══════════════════════════════════════════
-   IMPORT / EXPORT
-══════════════════════════════════════════ */
-function exportData() {
-  const blob=new Blob([JSON.stringify({appliances,rate,budget},null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download='eco-saver-data.json'; a.click();
-  URL.revokeObjectURL(a.href);
-}
-function importData(e) {
-  const file=e.target.files[0]; if(!file) return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    try {
-      const d=JSON.parse(ev.target.result);
-      if(!Array.isArray(d.appliances)) throw new Error('Missing appliances');
-      for(const a of d.appliances){
-        if(typeof a.id!=='string') throw new Error('Bad id');
-        if(!a.name?.trim()) throw new Error('Bad name');
-        if(typeof a.watts!=='number'||a.watts<=0) throw new Error('Bad watts');
-        if(typeof a.qty!=='number'||a.qty<1) throw new Error('Bad qty');
-        if(typeof a.hours!=='number'||a.hours<0) throw new Error('Bad hours');
-        if(!FREQ[a.freq]) throw new Error('Bad freq: '+a.freq);
-      }
-      appliances=d.appliances;
-      if(typeof d.rate==='number'&&d.rate>0){ rate=d.rate; document.getElementById('s-rate').value=rate; }
-      if(typeof d.budget==='number'&&d.budget>=0){ budget=d.budget; document.getElementById('s-budget').value=budget; }
-      save(); render(); fetchTips(true);
-      alert(`✅ Imported ${appliances.length} appliance(s).`);
-    } catch(err){ alert('❌ Invalid file: '+err.message); }
-    e.target.value='';
-  };
-  r.readAsText(file);
-}
-function save() {
-  localStorage.setItem(LS.APP,JSON.stringify(appliances));
-  localStorage.setItem(LS.RATE,rate);
-  localStorage.setItem(LS.BUDGET,budget);
+// ---- RENDER ALL ----
+function renderAll() {
+  renderHome();
+  renderDevices();
+  renderGrade();
+  renderSettings();
 }
 
-/* ══════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════ */
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-function vibrate(){ try{navigator.vibrate&&navigator.vibrate(40)}catch{} }
+// ---- INIT ----
+function init() {
+  load();
+  renderAll();
+  updateClock();
+  setInterval(updateClock, 1000);
+  initAneco();
+  initSettings();
 
-/* Enter key on form */
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'&&document.getElementById('form-sheet').classList.contains('open')) closeSheet();
-  if(e.key==='Enter'&&['f-name','f-watts','f-qty','f-hours'].includes(e.target.id)) submitForm();
-});
+  // NAV
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => switchView(tab.dataset.view));
+  });
+
+  // FAB
+  document.getElementById('fab').addEventListener('click', () => {
+    editId = null;
+    resetSheet();
+    openSheet();
+  });
+
+  // Sheet overlay/cancel
+  document.getElementById('sheet-overlay').addEventListener('click', closeSheet);
+  document.getElementById('sheet-cancel').addEventListener('click', closeSheet);
+  document.getElementById('sheet-save').addEventListener('click', saveAppliance);
+
+  // Seg switch
+  document.getElementById('seg-hr').addEventListener('click', () => { setUnit('hr'); document.getElementById('f-time').value = ''; });
+  document.getElementById('seg-min').addEventListener('click', () => { setUnit('min'); document.getElementById('f-time').value = ''; });
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeSheet();
+    if (e.key === 'Enter' && document.getElementById('sheet').classList.contains('open')) saveAppliance();
+  });
+
+  // Tips refresh
+  document.getElementById('tips-refresh-btn').addEventListener('click', () => { cachedTips = null; fetchTips(); });
+
+  // Initial tips render
+  if (state.appliances.length === 0) renderTips(null);
+}
+
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
